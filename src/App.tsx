@@ -58,19 +58,23 @@ function App() {
 
   const filteredAndSortedCreators = [...creators]
     .filter(creator => {
+      if (!creator) return false;
+      
       return (
-        creator.agency.toLowerCase().includes(filters.agency.toLowerCase()) &&
-        creator.focus.some(f => f.toLowerCase().includes(filters.focus.toLowerCase())) &&
-        creator.platforms.some(platform => 
-          platform.toLowerCase().includes(filters.platforms.toLowerCase())
+        (creator.agency?.toLowerCase() || '').includes(filters.agency.toLowerCase()) &&
+        (creator.focus || []).some(f => (f?.toLowerCase() || '').includes(filters.focus.toLowerCase())) &&
+        (creator.platforms || []).some(platform => 
+          (platform?.toLowerCase() || '').includes(filters.platforms.toLowerCase())
         ) &&
-        creator.references.some(reference => 
-          reference.toLowerCase().includes(filters.references.toLowerCase())
+        (creator.references || []).some(reference => 
+          (reference?.toLowerCase() || '').includes(filters.references.toLowerCase())
         ) &&
         (filters.status === '' || creator.status === filters.status)
       );
     })
     .sort((a, b) => {
+      if (!a || !b) return 0;
+      
       const aValue = a[sortField];
       const bValue = b[sortField];
 
