@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/creator-management/static/css/main.2a94ad59.css",
+    "main.js": "/creator-management/static/js/main.cb931f0d.js",
+    "index.html": "/creator-management/index.html",
+    "main.2a94ad59.css.map": "/creator-management/static/css/main.2a94ad59.css.map",
+    "main.cb931f0d.js.map": "/creator-management/static/js/main.cb931f0d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2a94ad59.css",
+    "static/js/main.cb931f0d.js"
+  ]
+}
