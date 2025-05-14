@@ -1,44 +1,55 @@
-# Creator Management System
+# DACH Agency Directory
 
-Eine moderne Webanwendung zur Verwaltung von Creators und deren Inhalten.
+Eine übersichtliche Tabelle von Creator-Agenturen im DACH-Raum (Deutschland, Österreich, Schweiz). Diese Anwendung bietet eine einfache Möglichkeit, Agenturen nach verschiedenen Kriterien zu filtern und zu sortieren.
 
 ## Features
 
-- Übersichtliche Darstellung von Creators
-- Verwaltung von Creator-Daten
-- Responsive Design
-- Moderne Benutzeroberfläche
+- Übersichtliche Darstellung von Creator-Agenturen im DACH-Raum
+- Filterung nach:
+  - Agentur-Name
+  - Fokus-Bereich
+  - Plattformen
+  - Referenzen
+  - Status
+- Sortierung nach allen Spalten
+- Responsive Design für Desktop und Mobile
+
+## Daten
+
+Die Agentur-Daten werden aus einer CSV-Datei geladen und enthalten Informationen zu:
+- Agentur-Name
+- Fokus-Bereiche
+- Unterstützte Plattformen
+- Bekannte Referenzen
+- Bedingungen
+- Follower-Reichweite
+- Status
+- Notizen
 
 ## Technologien
 
 - React
 - TypeScript
 - Tailwind CSS
-- GitHub Pages
+- PapaParse für CSV-Verarbeitung
 
 ## Installation
 
-1. Repository klonen:
 ```bash
-git clone [repository-url]
-cd creator-management
-```
-
-2. Abhängigkeiten installieren:
-```bash
+# Dependencies installieren
 npm install
-```
 
-3. Entwicklungsserver starten:
-```bash
+# Entwicklungsserver starten
 npm start
-```
 
-Die Anwendung ist dann unter `http://localhost:3000` erreichbar.
+# Für Produktion bauen
+npm run build
+```
 
 ## Deployment
 
-Die Anwendung wird automatisch auf GitHub Pages deployed, wenn Änderungen in den main Branch gepusht werden.
+Die Anwendung wird automatisch auf GitHub Pages deployed:
+https://xboxdevcom.github.io/agencys/
 
 ## Lizenz
 
