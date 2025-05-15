@@ -1,8 +1,8 @@
 {
-  "name": "creator-management",
+  "name": "creator-agencies",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://xboxdevcom.github.io/agencys",
+  "homepage": "https://xboxdevcom.github.io/agencies",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
