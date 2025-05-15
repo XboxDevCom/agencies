@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Creator } from './types/Creator';
 import CreatorList from './components/CreatorList.tsx';
 import SearchAndFilter from './components/SearchAndFilter.tsx';
+import Footer from './components/Footer.tsx';
 import Papa from 'papaparse';
 
 function App() {
@@ -103,8 +104,8 @@ function App() {
     });
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gray-900 flex flex-col">
+      <div className="container mx-auto px-4 py-8 flex-grow">
         <h1 className="text-3xl font-bold text-green-500 mb-8">Creator Agencies</h1>
         
         {/* Filter Section */}
@@ -124,6 +125,7 @@ function App() {
           sortDirection={sortDirection}
         />
       </div>
+      <Footer />
     </div>
   );
 }
