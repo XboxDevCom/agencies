@@ -3,6 +3,8 @@ import { Creator } from './types/Creator';
 import CreatorList from './components/CreatorList.tsx';
 import SearchAndFilter from './components/SearchAndFilter.tsx';
 import Footer from './components/Footer.tsx';
+import SEO from './components/SEO.tsx';
+import { HelmetProvider } from 'react-helmet-async';
 import Papa from 'papaparse';
 
 function App() {
@@ -104,29 +106,32 @@ function App() {
     });
 
   return (
-    <div className="min-h-screen bg-gray-900 flex flex-col">
-      <div className="container mx-auto px-4 py-8 flex-grow">
-        <h1 className="text-3xl font-bold text-green-500 mb-8">Creator Agencies</h1>
-        
-        {/* Filter Section */}
-        <div className="bg-gray-800 rounded-lg shadow-lg p-6 mb-8 border border-gray-700">
-          <h2 className="text-lg font-semibold text-green-400 mb-4">Filter</h2>
-          <SearchAndFilter
-            onSearch={handleSearch}
-            onFilterChange={handleFilterChange}
-            data={creators}
+    <HelmetProvider>
+      <div className="min-h-screen bg-gray-900 flex flex-col">
+        <SEO />
+        <div className="container mx-auto px-4 py-8 flex-grow">
+          <h1 className="text-3xl font-bold text-green-500 mb-8">Creator Agencies</h1>
+          
+          {/* Filter Section */}
+          <div className="bg-gray-800 rounded-lg shadow-lg p-6 mb-8 border border-gray-700">
+            <h2 className="text-lg font-semibold text-green-400 mb-4">Filter</h2>
+            <SearchAndFilter
+              onSearch={handleSearch}
+              onFilterChange={handleFilterChange}
+              data={creators}
+            />
+          </div>
+
+          <CreatorList 
+            creators={filteredAndSortedCreators}
+            onSort={handleSort}
+            sortField={sortField}
+            sortDirection={sortDirection}
           />
         </div>
-
-        <CreatorList 
-          creators={filteredAndSortedCreators}
-          onSort={handleSort}
-          sortField={sortField}
-          sortDirection={sortDirection}
-        />
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </HelmetProvider>
   );
 }
 
