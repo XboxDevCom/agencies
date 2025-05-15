@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Creator } from './types/Creator';
 import CreatorList from './components/CreatorList.tsx';
+import SearchAndFilter from './components/SearchAndFilter.tsx';
 import Papa from 'papaparse';
 
 function App() {
@@ -8,11 +9,10 @@ function App() {
   const [sortField, setSortField] = useState<keyof Creator>('agency');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [filters, setFilters] = useState({
-    agency: '',
-    focus: '',
-    platforms: '',
-    references: '',
-    status: ''
+    platform: '',
+    status: '',
+    minFollowers: 0,
+    focus: ''
   });
 
   useEffect(() => {
@@ -49,11 +49,13 @@ function App() {
     }
   };
 
-  const handleFilterChange = (field: keyof typeof filters, value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const handleSearch = (query: string) => {
+    // Implement search functionality if needed
+    console.log('Search query:', query);
+  };
+
+  const handleFilterChange = (newFilters: typeof filters) => {
+    setFilters(newFilters);
   };
 
   const filteredAndSortedCreators = [...creators]
@@ -61,15 +63,14 @@ function App() {
       if (!creator) return false;
       
       return (
-        (creator.agency?.toLowerCase() || '').includes(filters.agency.toLowerCase()) &&
-        (creator.focus || []).some(f => (f?.toLowerCase() || '').includes(filters.focus.toLowerCase())) &&
-        (creator.platforms || []).some(platform => 
-          (platform?.toLowerCase() || '').includes(filters.platforms.toLowerCase())
-        ) &&
-        (creator.references || []).some(reference => 
-          (reference?.toLowerCase() || '').includes(filters.references.toLowerCase())
-        ) &&
-        (filters.status === '' || creator.status === filters.status)
+        (filters.platform === '' || (creator.platforms || []).some(platform => 
+          platform.toLowerCase().includes(filters.platform.toLowerCase())
+        )) &&
+        (filters.focus === '' || (creator.focus || []).some(f => 
+          f.toLowerCase().includes(filters.focus.toLowerCase())
+        )) &&
+        (filters.status === '' || creator.status === filters.status) &&
+        (filters.minFollowers === 0 || creator.followers >= filters.minFollowers)
       );
     })
     .sort((a, b) => {
@@ -109,75 +110,11 @@ function App() {
         {/* Filter Section */}
         <div className="bg-white rounded-lg shadow p-6 mb-8">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <label htmlFor="agency-filter" className="block text-sm font-medium text-gray-700 mb-1">
-                Agency
-              </label>
-              <input
-                type="text"
-                id="agency-filter"
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                placeholder="Filter by agency..."
-                value={filters.agency}
-                onChange={(e) => handleFilterChange('agency', e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="focus-filter" className="block text-sm font-medium text-gray-700 mb-1">
-                Focus
-              </label>
-              <input
-                type="text"
-                id="focus-filter"
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                placeholder="Filter by focus..."
-                value={filters.focus}
-                onChange={(e) => handleFilterChange('focus', e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="platforms-filter" className="block text-sm font-medium text-gray-700 mb-1">
-                Platforms
-              </label>
-              <input
-                type="text"
-                id="platforms-filter"
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                placeholder="Filter by platforms..."
-                value={filters.platforms}
-                onChange={(e) => handleFilterChange('platforms', e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="references-filter" className="block text-sm font-medium text-gray-700 mb-1">
-                References
-              </label>
-              <input
-                type="text"
-                id="references-filter"
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                placeholder="Filter by references..."
-                value={filters.references}
-                onChange={(e) => handleFilterChange('references', e.target.value)}
-              />
-            </div>
-            <div>
-              <label htmlFor="status-filter" className="block text-sm font-medium text-gray-700 mb-1">
-                Status
-              </label>
-              <select
-                id="status-filter"
-                className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                value={filters.status}
-                onChange={(e) => handleFilterChange('status', e.target.value)}
-              >
-                <option value="">All</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
+          <SearchAndFilter
+            onSearch={handleSearch}
+            onFilterChange={handleFilterChange}
+            data={creators}
+          />
         </div>
 
         <CreatorList 

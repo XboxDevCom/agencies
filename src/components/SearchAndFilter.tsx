@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { Creator } from '../types/Creator';
 
 interface SearchAndFilterProps {
   onSearch: (query: string) => void;
@@ -6,10 +7,12 @@ interface SearchAndFilterProps {
     platform: string;
     status: string;
     minFollowers: number;
+    focus: string;
   }) => void;
+  data: Creator[];
 }
 
-const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterChange }) => {
+const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterChange, data }) => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearch(e.target.value);
   };
@@ -20,6 +23,17 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
       [name]: value,
     } as any);
   };
+
+  // Extract unique values for dropdowns
+  const uniquePlatforms = useMemo(() => {
+    const platforms = data.flatMap(agency => agency.platforms || []);
+    return Array.from(new Set(platforms)).sort();
+  }, [data]);
+
+  const uniqueFocus = useMemo(() => {
+    const focus = data.flatMap(agency => agency.focus || []);
+    return Array.from(new Set(focus)).sort();
+  }, [data]);
 
   return (
     <div className="space-y-4">
@@ -54,7 +68,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
         <div>
           <label htmlFor="platform" className="block text-sm font-medium text-gray-700">
             Plattform
@@ -66,10 +80,30 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
             onChange={handleFilterChange}
           >
             <option value="">Alle Plattformen</option>
-            <option value="Instagram">Instagram</option>
-            <option value="YouTube">YouTube</option>
-            <option value="TikTok">TikTok</option>
-            <option value="Twitter">Twitter</option>
+            {uniquePlatforms.map((platform) => (
+              <option key={platform} value={platform}>
+                {platform}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="focus" className="block text-sm font-medium text-gray-700">
+            Fokus
+          </label>
+          <select
+            id="focus"
+            name="focus"
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            onChange={handleFilterChange}
+          >
+            <option value="">Alle Fokus-Bereiche</option>
+            {uniqueFocus.map((focus) => (
+              <option key={focus} value={focus}>
+                {focus}
+              </option>
+            ))}
           </select>
         </div>
 
