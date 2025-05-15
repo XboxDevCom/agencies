@@ -14,6 +14,15 @@ const Footer: React.FC = () => {
           >
             Huskynarr
           </a>
+          {' '}&{' '}
+          <a
+            href="https://xboxdev.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-green-400 hover:text-green-300 transition-colors"
+          >
+            XboxDev
+          </a>
           {' '}- Open Source on{' '}
           <a
             href="https://github.com/XboxDevCom/agencies"
