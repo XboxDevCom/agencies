@@ -61,7 +61,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
             type="text"
             name="search"
             id="search"
-            className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+            className="focus:ring-green-500 focus:border-green-500 block w-full pl-10 sm:text-sm border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
             placeholder="Suche nach Namen oder E-Mail..."
             onChange={handleSearchChange}
           />
@@ -70,13 +70,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
         <div>
-          <label htmlFor="platform" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="platform" className="block text-sm font-medium text-gray-300">
             Plattform
           </label>
           <select
             id="platform"
             name="platform"
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md bg-gray-700 text-gray-200"
             onChange={handleFilterChange}
           >
             <option value="">Alle Plattformen</option>
@@ -89,13 +89,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
         </div>
 
         <div>
-          <label htmlFor="focus" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="focus" className="block text-sm font-medium text-gray-300">
             Fokus
           </label>
           <select
             id="focus"
             name="focus"
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md bg-gray-700 text-gray-200"
             onChange={handleFilterChange}
           >
             <option value="">Alle Fokus-Bereiche</option>
@@ -108,13 +108,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
         </div>
 
         <div>
-          <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="status" className="block text-sm font-medium text-gray-300">
             Status
           </label>
           <select
             id="status"
             name="status"
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md bg-gray-700 text-gray-200"
             onChange={handleFilterChange}
           >
             <option value="">Alle Status</option>
@@ -124,7 +124,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
         </div>
 
         <div>
-          <label htmlFor="minFollowers" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="minFollowers" className="block text-sm font-medium text-gray-300">
             Min. Follower
           </label>
           <input
@@ -132,7 +132,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
             name="minFollowers"
             id="minFollowers"
             min="0"
-            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+            className="mt-1 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-600 rounded-md bg-gray-700 text-gray-200"
             onChange={handleFilterChange}
           />
         </div>

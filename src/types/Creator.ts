@@ -7,4 +7,5 @@ export interface Creator {
   followers: number;
   status: 'active' | 'inactive';
   notes?: string;
+  url: string;
 } 
