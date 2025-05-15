@@ -8,6 +8,8 @@ interface SearchAndFilterProps {
     status: string;
     minFollowers: number;
     focus: string;
+    type: string;
+    pricing_model: string;
   }) => void;
   data: Creator[];
 }
@@ -69,6 +71,38 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <label htmlFor="type" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+            Agency Type
+          </label>
+          <select
+            id="type"
+            name="type"
+            className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
+            onChange={handleFilterChange}
+          >
+            <option value="">All Types</option>
+            <option value="exclusive">Exclusive</option>
+            <option value="mass">Mass</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="pricing_model" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+            Pricing Model
+          </label>
+          <select
+            id="pricing_model"
+            name="pricing_model"
+            className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
+            onChange={handleFilterChange}
+          >
+            <option value="">All Pricing Models</option>
+            <option value="commission">Commission</option>
+            <option value="base_fee">Base Fee</option>
+          </select>
+        </div>
+
         <div>
           <label htmlFor="platform" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
             Platform

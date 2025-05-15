@@ -35,6 +35,20 @@ const CreatorList: React.FC<CreatorListProps> = ({
               <th
                 scope="col"
                 className="hidden sm:table-cell px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-green-400 uppercase tracking-wider cursor-pointer hover:bg-gray-800"
+                onClick={() => onSort('type')}
+              >
+                Type {renderSortIcon('type')}
+              </th>
+              <th
+                scope="col"
+                className="hidden sm:table-cell px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-green-400 uppercase tracking-wider cursor-pointer hover:bg-gray-800"
+                onClick={() => onSort('pricing_model')}
+              >
+                Pricing {renderSortIcon('pricing_model')}
+              </th>
+              <th
+                scope="col"
+                className="hidden sm:table-cell px-3 sm:px-6 py-2 sm:py-3 text-left text-xs font-medium text-green-400 uppercase tracking-wider cursor-pointer hover:bg-gray-800"
                 onClick={() => onSort('focus')}
               >
                 Focus {renderSortIcon('focus')}
@@ -90,6 +104,24 @@ const CreatorList: React.FC<CreatorListProps> = ({
                   </a>
                   <div className="sm:hidden mt-1">
                     <div className="flex flex-wrap gap-1">
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                          creator.type === 'exclusive'
+                            ? 'bg-indigo-900 text-indigo-200'
+                            : 'bg-orange-900 text-orange-200'
+                        }`}
+                      >
+                        {creator.type}
+                      </span>
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                          creator.pricing_model === 'commission'
+                            ? 'bg-teal-900 text-teal-200'
+                            : 'bg-cyan-900 text-cyan-200'
+                        }`}
+                      >
+                        {creator.pricing_model === 'commission' ? 'Commission' : 'Base Fee'}
+                      </span>
                       {creator.focus.map((item, i) => (
                         <span
                           key={i}
@@ -100,6 +132,28 @@ const CreatorList: React.FC<CreatorListProps> = ({
                       ))}
                     </div>
                   </div>
+                </td>
+                <td className="hidden sm:table-cell px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-gray-300">
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                      creator.type === 'exclusive'
+                        ? 'bg-indigo-900 text-indigo-200'
+                        : 'bg-orange-900 text-orange-200'
+                    }`}
+                  >
+                    {creator.type}
+                  </span>
+                </td>
+                <td className="hidden sm:table-cell px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-gray-300">
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                      creator.pricing_model === 'commission'
+                        ? 'bg-teal-900 text-teal-200'
+                        : 'bg-cyan-900 text-cyan-200'
+                    }`}
+                  >
+                    {creator.pricing_model === 'commission' ? 'Commission' : 'Base Fee'}
+                  </span>
                 </td>
                 <td className="hidden sm:table-cell px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-gray-300">
                   <div className="flex flex-wrap gap-1">

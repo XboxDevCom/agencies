@@ -15,7 +15,9 @@ function App() {
     platform: '',
     status: '',
     minFollowers: 0,
-    focus: ''
+    focus: '',
+    type: '',
+    pricing_model: ''
   });
 
   useEffect(() => {
@@ -73,6 +75,8 @@ function App() {
           f.toLowerCase().includes(filters.focus.toLowerCase())
         )) &&
         (filters.status === '' || creator.status === filters.status) &&
+        (filters.type === '' || creator.type === filters.type) &&
+        (filters.pricing_model === '' || creator.pricing_model === filters.pricing_model) &&
         (filters.minFollowers === 0 || creator.followers >= filters.minFollowers)
       );
     })
