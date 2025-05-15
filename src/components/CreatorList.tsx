@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Creator } from '../types/Creator';
-import AgencyModal from './AgencyModal';
+import AgencyModal from './AgencyModal.tsx';
 
 interface CreatorListProps {
   creators: Creator[];
@@ -157,7 +157,7 @@ const CreatorList: React.FC<CreatorListProps> = ({
                         </span>
                         <span className="text-gray-400 text-xs">{creator.location}</span>
                         <span className="text-gray-400 text-xs">Founded {creator.founding_year}</span>
-                        {creator.departments.map((dept, i) => (
+                        {creator.departments?.map((dept, i) => (
                           <span
                             key={i}
                             className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-pink-900 text-pink-200"
@@ -165,7 +165,7 @@ const CreatorList: React.FC<CreatorListProps> = ({
                             {dept}
                           </span>
                         ))}
-                        {creator.focus.map((item, i) => (
+                        {creator.focus?.map((item, i) => (
                           <span
                             key={i}
                             className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-900 text-purple-200"
@@ -211,7 +211,7 @@ const CreatorList: React.FC<CreatorListProps> = ({
                   </td>
                   <td className="hidden sm:table-cell px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-gray-300">
                     <div className="flex flex-wrap gap-1">
-                      {creator.departments.map((department, i) => (
+                      {creator.departments?.map((department, i) => (
                         <span
                           key={i}
                           className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-pink-900 text-pink-200"
@@ -223,7 +223,7 @@ const CreatorList: React.FC<CreatorListProps> = ({
                   </td>
                   <td className="hidden sm:table-cell px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-gray-300">
                     <div className="flex flex-wrap gap-1">
-                      {creator.focus.map((item, i) => (
+                      {creator.focus?.map((item, i) => (
                         <span
                           key={i}
                           className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-900 text-purple-200"
@@ -235,7 +235,7 @@ const CreatorList: React.FC<CreatorListProps> = ({
                   </td>
                   <td className="hidden md:table-cell px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-gray-300">
                     <div className="flex flex-wrap gap-1">
-                      {creator.platforms.map((platform, i) => (
+                      {creator.platforms?.map((platform, i) => (
                         <span
                           key={i}
                           className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-900 text-blue-200"
@@ -247,7 +247,7 @@ const CreatorList: React.FC<CreatorListProps> = ({
                   </td>
                   <td className="hidden lg:table-cell px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-gray-300">
                     <div className="flex flex-wrap gap-1">
-                      {creator.references.map((reference, i) => (
+                      {creator.references?.map((reference, i) => (
                         <span
                           key={i}
                           className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-900 text-green-200"
@@ -259,7 +259,7 @@ const CreatorList: React.FC<CreatorListProps> = ({
                   </td>
                   <td className="hidden lg:table-cell px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-sm text-gray-300">
                     <div className="flex flex-wrap gap-1">
-                      {creator.conditions.map((condition, i) => (
+                      {creator.conditions?.map((condition, i) => (
                         <span
                           key={i}
                           className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-900 text-yellow-200"
