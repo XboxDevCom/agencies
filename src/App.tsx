@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     // Load data.csv directly from public directory
-    fetch('/agencies/data.csv')
+    fetch('/data.csv')
       .then(response => response.text())
       .then(csvData => {
         Papa.parse(csvData, {
