@@ -109,12 +109,12 @@ function App() {
     <HelmetProvider>
       <div className="min-h-screen bg-gray-900 flex flex-col">
         <SEO />
-        <div className="container mx-auto px-4 py-8 flex-grow">
-          <h1 className="text-3xl font-bold text-green-500 mb-8">Creator Agencies</h1>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex-grow">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-green-500 mb-4 sm:mb-6 lg:mb-8">Creator Agencies</h1>
           
           {/* Filter Section */}
-          <div className="bg-gray-800 rounded-lg shadow-lg p-6 mb-8 border border-gray-700">
-            <h2 className="text-lg font-semibold text-green-400 mb-4">Filter</h2>
+          <div className="bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 lg:mb-8 border border-gray-700">
+            <h2 className="text-base sm:text-lg font-semibold text-green-400 mb-3 sm:mb-4">Filter</h2>
             <SearchAndFilter
               onSearch={handleSearch}
               onFilterChange={handleFilterChange}

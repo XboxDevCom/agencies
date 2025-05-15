@@ -36,15 +36,15 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
   }, [data]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       <div>
         <label htmlFor="search" className="sr-only">
-          Suche
+          Search
         </label>
         <div className="relative rounded-md shadow-sm">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg
-              className="h-5 w-5 text-gray-400"
+              className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
               fill="currentColor"
@@ -61,25 +61,25 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
             type="text"
             name="search"
             id="search"
-            className="focus:ring-green-500 focus:border-green-500 block w-full pl-10 sm:text-sm border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
-            placeholder="Suche nach Namen oder E-Mail..."
+            className="focus:ring-green-500 focus:border-green-500 block w-full pl-8 sm:pl-10 pr-3 py-2 sm:py-2.5 text-sm border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
+            placeholder="Search by name or email..."
             onChange={handleSearchChange}
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <label htmlFor="platform" className="block text-sm font-medium text-gray-300">
-            Plattform
+          <label htmlFor="platform" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+            Platform
           </label>
           <select
             id="platform"
             name="platform"
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md bg-gray-700 text-gray-200"
+            className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
             onChange={handleFilterChange}
           >
-            <option value="">Alle Plattformen</option>
+            <option value="">All Platforms</option>
             {uniquePlatforms.map((platform) => (
               <option key={platform} value={platform}>
                 {platform}
@@ -89,16 +89,16 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
         </div>
 
         <div>
-          <label htmlFor="focus" className="block text-sm font-medium text-gray-300">
-            Fokus
+          <label htmlFor="focus" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+            Focus
           </label>
           <select
             id="focus"
             name="focus"
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md bg-gray-700 text-gray-200"
+            className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
             onChange={handleFilterChange}
           >
-            <option value="">Alle Fokus-Bereiche</option>
+            <option value="">All Focus Areas</option>
             {uniqueFocus.map((focus) => (
               <option key={focus} value={focus}>
                 {focus}
@@ -108,31 +108,31 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
         </div>
 
         <div>
-          <label htmlFor="status" className="block text-sm font-medium text-gray-300">
+          <label htmlFor="status" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
             Status
           </label>
           <select
             id="status"
             name="status"
-            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm rounded-md bg-gray-700 text-gray-200"
+            className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
             onChange={handleFilterChange}
           >
-            <option value="">Alle Status</option>
-            <option value="active">Aktiv</option>
-            <option value="inactive">Inaktiv</option>
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
           </select>
         </div>
 
         <div>
-          <label htmlFor="minFollowers" className="block text-sm font-medium text-gray-300">
-            Min. Follower
+          <label htmlFor="minFollowers" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
+            Min. Followers
           </label>
           <input
             type="number"
             name="minFollowers"
             id="minFollowers"
             min="0"
-            className="mt-1 focus:ring-green-500 focus:border-green-500 block w-full shadow-sm sm:text-sm border-gray-600 rounded-md bg-gray-700 text-gray-200"
+            className="block w-full pl-3 pr-3 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
             onChange={handleFilterChange}
           />
         </div>

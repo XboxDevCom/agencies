@@ -2,9 +2,9 @@ import React from 'react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-800 border-t border-gray-700 py-4 mt-8">
-      <div className="container mx-auto px-4 text-center text-gray-400">
-        <p>
+    <footer className="bg-gray-800 border-t border-gray-700 py-3 sm:py-4 mt-4 sm:mt-6 lg:mt-8">
+      <div className="container mx-auto px-4 text-center">
+        <p className="text-sm sm:text-base text-gray-400">
           Made with <span className="text-red-500">♥</span> by{' '}
           <a
             href="https://huskynarr.de"
