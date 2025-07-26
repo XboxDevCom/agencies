@@ -3,14 +3,14 @@ import { Creator } from '../types/Creator';
 
 interface SearchAndFilterProps {
   onSearch: (query: string) => void;
-  onFilterChange: (filters: {
+  onFilterChange: (filters: Partial<{
     platform: string;
     status: string;
     minFollowers: number;
     focus: string;
     type: string;
     pricing_model: string;
-  }) => void;
+  }>) => void;
   data: Creator[];
 }
 

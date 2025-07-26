@@ -8,9 +8,9 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = 'Creator Agencies - Find the Perfect Agency for Your Content',
-  description = 'Discover and compare creator agencies. Find the perfect agency for your content creation needs with our comprehensive database of agencies, their focus areas, and requirements.',
-  keywords = 'creator agencies, content creator, influencer marketing, agency database, content creation, social media agencies'
+  title = 'DACH Creator Agenturen - Finde die perfekte Agentur für deinen Content',
+  description = 'Entdecke und vergleiche Creator-Agenturen im DACH-Raum. Finde die perfekte Agentur für deine Content Creation mit unserer umfassenden Datenbank von Agenturen, deren Schwerpunkten und Anforderungen.',
+  keywords = 'creator agenturen, content creator, influencer marketing, agentur datenbank, content creation, social media agenturen, DACH, Deutschland, Österreich, Schweiz'
 }) => {
   return (
     <Helmet>
@@ -31,7 +31,7 @@ const SEO: React.FC<SEOProps> = ({
       
       {/* Additional SEO tags */}
       <meta name="robots" content="index, follow" />
-      <meta name="language" content="English" />
+      <meta name="language" content="German" />
       <meta name="revisit-after" content="7 days" />
       <link rel="canonical" href="https://agencies.xboxdev.com" />
     </Helmet>
