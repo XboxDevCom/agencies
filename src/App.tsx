@@ -34,7 +34,9 @@ function App() {
               platforms: row.platforms ? row.platforms.split(',').map((item: string) => item.trim()) : [],
               references: row.references ? row.references.split(',').map((item: string) => item.trim()) : [],
               conditions: row.conditions ? row.conditions.split(',').map((item: string) => item.trim()) : [],
-              followers: parseInt(row.followers) || 0
+              departments: row.departments ? row.departments.split(',').map((item: string) => item.trim()) : [],
+              followers: parseInt(row.followers) || 0,
+              founding_year: parseInt(row.founding_year) || 2020
             })) as Creator[];
             setCreators(parsedData);
           }
@@ -114,7 +116,7 @@ function App() {
       <div className="min-h-screen bg-gray-900 flex flex-col">
         <SEO />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex-grow">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-green-500 mb-4 sm:mb-6 lg:mb-8">Creator Agencies</h1>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-green-500 mb-4 sm:mb-6 lg:mb-8">DACH Creator Agenturen</h1>
           
           {/* Filter Section */}
           <div className="bg-gray-800 rounded-lg shadow-lg p-4 sm:p-6 mb-4 sm:mb-6 lg:mb-8 border border-gray-700">
