@@ -61,8 +61,8 @@ function App() {
     console.log('Search query:', query);
   };
 
-  const handleFilterChange = (newFilters: typeof filters) => {
-    setFilters(newFilters);
+  const handleFilterChange = (newFilters: Partial<typeof filters>) => {
+    setFilters(prevFilters => ({ ...prevFilters, ...newFilters }));
   };
 
   const filteredAndSortedCreators = [...creators]
@@ -71,10 +71,10 @@ function App() {
       
       return (
         (filters.platform === '' || (creator.platforms || []).some(platform => 
-          platform.toLowerCase().includes(filters.platform.toLowerCase())
+          platform && platform.toLowerCase().includes(filters.platform.toLowerCase())
         )) &&
         (filters.focus === '' || (creator.focus || []).some(f => 
-          f.toLowerCase().includes(filters.focus.toLowerCase())
+          f && f.toLowerCase().includes(filters.focus.toLowerCase())
         )) &&
         (filters.status === '' || creator.status === filters.status) &&
         (filters.type === '' || creator.type === filters.type) &&
