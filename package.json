@@ -54,7 +54,7 @@
     "lint:check": "eslint src --ext .ts,.tsx",
     "lint:a11y": "eslint src --ext .ts,.tsx --config .eslintrc.a11y.js",
     "type-check": "tsc --noEmit",
-    "analyze": "npm run build && npx bundle-analyzer build/static/js/*.js",
+    "analyze": "npm run build && node scripts/bundle-analysis.js",
     "dev": "npm start",
     "audit:a11y": "node scripts/audit-accessibility.js",
     "extract:translations": "node scripts/extract-translations.js",
@@ -134,6 +134,13 @@
       "last 1 safari version"
     ]
   },
+  "overrides": {
+    "react-scripts": {
+      "nth-check": "^2.0.1",
+      "postcss": "^8.4.31",
+      "webpack-dev-server": "^4.15.1"
+    }
+  },
   "devDependencies": {
     "@axe-core/react": "^4.8.2",
     "@testing-library/jest-dom": "^6.6.4",
@@ -153,10 +160,11 @@
     "gh-pages": "^6.1.1",
     "jest-axe": "^8.0.0",
     "postcss": "^8.4.35",
-    "puppeteer": "^21.0.0",
+    "puppeteer": "^24.15.0",
     "semver": "^7.5.4",
+    "source-map-explorer": "^2.5.3",
     "tailwindcss": "^3.4.1",
-    "webpack-bundle-analyzer": "^4.9.0"
+    "webpack-bundle-analyzer": "^4.10.2"
   },
   "jest": {
     "collectCoverageFrom": [
