@@ -330,7 +330,7 @@ const AppContent: React.FC = () => {
           />
         </section>
 
-        <main id="main-content">
+        <main id="main-content" role="main">
           <section aria-labelledby="results-heading">
             <h2 id="results-heading" className="sr-only">
               {t('search.noResults')}
