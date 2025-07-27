@@ -1,3 +1,63 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities; 
+@tailwind utilities;
+
+/* Custom scrollbar styling for dark theme integration */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #10b981 #374151;
+}
+
+/* Webkit scrollbar styling (Chrome, Safari, Edge) */
+*::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #374151;
+  border-radius: 8px;
+  border: 2px solid #4b5563;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  border-radius: 8px;
+  border: 2px solid #374151;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #059669 0%, #047857 100%);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 2px 4px rgba(0, 0, 0, 0.4);
+  transform: scale(1.05);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, #047857 0%, #065f46 100%);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+*::-webkit-scrollbar-corner {
+  background: #374151;
+  border-radius: 8px;
+}
+
+/* Hide horizontal scrollbar for table container only */
+.table-container {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.table-container::-webkit-scrollbar {
+  height: 0px;
+  background: transparent;
+}

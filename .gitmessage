@@ -1,0 +1,51 @@
+# <type>[optional scope]: <description>
+#
+# [optional body]
+#
+# [optional footer(s)]
+
+# --- COMMIT TYPES ---
+# feat:     ✨ A new feature
+# fix:      🐛 A bug fix
+# docs:     📚 Documentation only changes
+# style:    💄 Changes that do not affect the meaning of the code
+# refactor: ♻️  A code change that neither fixes a bug nor adds a feature
+# perf:     ⚡ A code change that improves performance
+# test:     ✅ Adding missing tests or correcting existing tests
+# build:    👷 Changes that affect the build system or external dependencies
+# ci:       🔧 Changes to our CI configuration files and scripts
+# chore:    🔨 Other changes that don't modify src or test files
+# revert:   ⏪ Reverts a previous commit
+# security: 🔒 A code change that fixes a security issue
+# i18n:     🌍 Internationalization and localization changes
+# a11y:     ♿ Accessibility improvements
+
+# --- EXAMPLES ---
+# feat: add language switcher component
+# fix(i18n): resolve translation parameter interpolation
+# docs: update README with accessibility information
+# style: improve button focus indicators
+# refactor(search): optimize filtering performance
+# perf: implement virtual scrolling for large datasets
+# test: add unit tests for translation validation
+# build: update dependencies to latest versions
+# ci: add accessibility testing to pipeline
+# chore: update git hooks configuration
+# security: fix XSS vulnerability in search input
+# i18n: add Italian translations
+# a11y: improve screen reader announcements
+
+# --- SCOPES (optional) ---
+# search, filter, modal, i18n, a11y, table, ui, data, build, ci, docs
+
+# --- BREAKING CHANGES ---
+# Add '!' after the type/scope: feat!: remove deprecated API
+# Or include 'BREAKING CHANGE:' in the footer
+
+# --- GUIDELINES ---
+# - Use the imperative mood in the subject line
+# - Do not end the subject line with a period
+# - Capitalize the subject line
+# - Limit the subject line to 50 characters
+# - Wrap the body at 72 characters
+# - Use the body to explain what and why vs. how

@@ -1,8 +1,29 @@
 {
   "name": "creator-agencies",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "homepage": "https://agencies.xboxdev.com",
+  "description": "A comprehensive, accessible directory of creator agencies in the DACH region (Germany, Austria, Switzerland) with multilingual support and advanced filtering capabilities.",
+  "keywords": [
+    "creator-agencies",
+    "dach-region",
+    "accessibility",
+    "multilingual",
+    "react",
+    "typescript",
+    "wcag"
+  ],
+  "author": {
+    "name": "Creator Agencies Directory Team",
+    "email": "contact@agencies.xboxdev.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xboxdevcom/creator-agencies.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xboxdevcom/creator-agencies/issues"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -24,15 +45,77 @@
     "start": "react-scripts start",
     "build": "react-scripts build && node scripts/copy-data.js",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage --watchAll=false",
+    "test:ci": "CI=true react-scripts test --coverage --watchAll=false",
+    "test:a11y": "npm run build && npm run test:accessibility",
+    "test:accessibility": "node scripts/accessibility-test.js",
+    "test:i18n": "node scripts/test-translations.js",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "lint": "eslint src --ext .ts,.tsx --fix",
+    "lint:check": "eslint src --ext .ts,.tsx",
+    "lint:a11y": "eslint src --ext .ts,.tsx --config .eslintrc.a11y.js",
+    "type-check": "tsc --noEmit",
+    "analyze": "npm run build && npx bundle-analyzer build/static/js/*.js",
+    "dev": "npm start",
+    "audit:a11y": "node scripts/audit-accessibility.js",
+    "extract:translations": "node scripts/extract-translations.js",
+    "validate:translations": "node scripts/validate-translations.js",
+    "version:patch": "npm run pre-release && npm version patch && npm run post-release",
+    "version:minor": "npm run pre-release && npm version minor && npm run post-release",
+    "version:major": "npm run pre-release && npm version major && npm run post-release",
+    "pre-release": "npm run test:ci && npm run lint:check && npm run type-check && npm run test:a11y && npm run validate:translations",
+    "post-release": "git push && git push --tags && npm run deploy",
+    "release:patch": "npm run version:patch",
+    "release:minor": "npm run version:minor",
+    "release:major": "npm run version:major",
+    "changelog": "node scripts/generate-changelog.js",
+    "prepare": "node scripts/setup-git-hooks.js"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "plugins": [
+      "jsx-a11y"
+    ],
+    "rules": {
+      "react-hooks/exhaustive-deps": "warn",
+      "@typescript-eslint/no-unused-vars": "warn",
+      "no-console": ["warn", { "allow": ["warn", "error"] }],
+      "jsx-a11y/alt-text": "error",
+      "jsx-a11y/anchor-has-content": "error",
+      "jsx-a11y/anchor-is-valid": "error",
+      "jsx-a11y/aria-activedescendant-has-tabindex": "error",
+      "jsx-a11y/aria-props": "error",
+      "jsx-a11y/aria-proptypes": "error",
+      "jsx-a11y/aria-role": "error",
+      "jsx-a11y/aria-unsupported-elements": "error",
+      "jsx-a11y/click-events-have-key-events": "error",
+      "jsx-a11y/heading-has-content": "error",
+      "jsx-a11y/html-has-lang": "error",
+      "jsx-a11y/iframe-has-title": "error",
+      "jsx-a11y/img-redundant-alt": "error",
+      "jsx-a11y/interactive-supports-focus": "error",
+      "jsx-a11y/label-has-associated-control": "error",
+      "jsx-a11y/media-has-caption": "warn",
+      "jsx-a11y/mouse-events-have-key-events": "error",
+      "jsx-a11y/no-access-key": "error",
+      "jsx-a11y/no-autofocus": "warn",
+      "jsx-a11y/no-distracting-elements": "error",
+      "jsx-a11y/no-interactive-element-to-noninteractive-role": "error",
+      "jsx-a11y/no-noninteractive-element-interactions": "error",
+      "jsx-a11y/no-noninteractive-element-to-interactive-role": "error",
+      "jsx-a11y/no-noninteractive-tabindex": "error",
+      "jsx-a11y/no-redundant-roles": "error",
+      "jsx-a11y/no-static-element-interactions": "error",
+      "jsx-a11y/role-has-required-aria-props": "error",
+      "jsx-a11y/role-supports-aria-props": "error",
+      "jsx-a11y/scope": "error",
+      "jsx-a11y/tabindex-no-positive": "error"
+    }
   },
   "browserslist": {
     "production": [
@@ -47,11 +130,62 @@
     ]
   },
   "devDependencies": {
+    "@axe-core/react": "^4.8.2",
     "@types/papaparse": "^5.3.16",
     "@types/react-dropzone": "^5.1.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "^10.4.17",
+    "axe-core": "^4.8.2",
+    "conventional-changelog": "^5.1.0",
+    "eslint": "^8.45.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "gh-pages": "^6.1.1",
+    "jest-axe": "^8.0.0",
     "postcss": "^8.4.35",
-    "tailwindcss": "^3.4.1"
+    "puppeteer": "^21.0.0",
+    "semver": "^7.5.4",
+    "tailwindcss": "^3.4.1",
+    "webpack-bundle-analyzer": "^4.9.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/index.tsx",
+      "!src/reportWebVitals.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 70,
+        "functions": 70,
+        "lines": 70,
+        "statements": 70
+      }
+    }
+  },
+  "accessibility": {
+    "standards": ["WCAG2A", "WCAG2AA"],
+    "ignore": [],
+    "timeout": 30000
+  },
+  "i18n": {
+    "supportedLanguages": ["de", "en", "fr", "it"],
+    "defaultLanguage": "de",
+    "fallbackLanguage": "en",
+    "translationFiles": "src/i18n/translations/*.ts"
+  },
+  "release": {
+    "tagFormat": "v${version}",
+    "branches": ["main", "master"],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ]
   }
 }
