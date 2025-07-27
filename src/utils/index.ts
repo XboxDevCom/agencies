@@ -234,6 +234,7 @@ export const analytics = {
   trackEvent: (eventName: string, properties?: Record<string, any>) => {
     // Placeholder for analytics implementation
     if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
       console.log('Analytics Event:', eventName, properties);
     }
   },
@@ -241,6 +242,7 @@ export const analytics = {
   trackPageView: (pageName: string) => {
     // Placeholder for page view tracking
     if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
       console.log('Page View:', pageName);
     }
   }

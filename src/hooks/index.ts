@@ -17,10 +17,10 @@ export const useCreatorData = () => {
         setError(null);
 
         // Try to load from cache first
-        const cachedData = storage.get<{ data: Creator[]; timestamp: number }>('creators_cache', null);
+        const cachedData = storage.get<{ data: Creator[]; timestamp: number }>('creators_cache', { data: [], timestamp: 0 });
         const cacheExpiry = 5 * 60 * 1000; // 5 minutes
 
-        if (cachedData && Date.now() - cachedData.timestamp < cacheExpiry) {
+        if (cachedData && cachedData.data.length > 0 && Date.now() - cachedData.timestamp < cacheExpiry) {
           setCreators(cachedData.data);
           setLastUpdated(new Date(cachedData.timestamp));
           setLoading(false);
@@ -54,7 +54,7 @@ export const useCreatorData = () => {
             
             setError(null);
           },
-          error: (error) => {
+          error: (error: any) => {
             console.error('CSV parsing error:', error);
             setError('Failed to parse CSV data');
           }
@@ -177,7 +177,7 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
       const valueToStore = value instanceof Function ? value(storedValue) : value;
       setStoredValue(valueToStore);
       storage.set(key, valueToStore);
-    } catch (error) {
+    } catch (error: any) {
       console.error(`Error setting localStorage key "${key}":`, error);
     }
   }, [key, storedValue]);

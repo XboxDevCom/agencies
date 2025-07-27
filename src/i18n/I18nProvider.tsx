@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo, createContext, useContext } from 'react';
-import { de } from './translations/de.ts';
-import { en } from './translations/en.ts';
-import { fr } from './translations/fr.ts';
-import { it } from './translations/it.ts';
+import { de } from './translations/de';
+import { en } from './translations/en';
+import { fr } from './translations/fr';
+import { it } from './translations/it';
 
 export type SupportedLanguage = 'de' | 'en' | 'fr' | 'it';
 

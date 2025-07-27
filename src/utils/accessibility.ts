@@ -375,23 +375,34 @@ export const logAccessibilityIssues = async () => {
   if (process.env.NODE_ENV === 'development') {
     const report = await generateAccessibilityReport();
     
+    // eslint-disable-next-line no-console
     console.group('🔍 Accessibility Report');
+    // eslint-disable-next-line no-console
     console.log('Summary:', report.summary);
     
     if (report.issues.length > 0) {
+      // eslint-disable-next-line no-console
       console.group('Issues:');
       report.issues.forEach((issue, index) => {
+        // eslint-disable-next-line no-console
         console.group(`${index + 1}. ${issue.type.toUpperCase()}: ${issue.message}`);
+        // eslint-disable-next-line no-console
         console.log('Element:', issue.element);
+        // eslint-disable-next-line no-console
         console.log('Rule:', issue.rule);
+        // eslint-disable-next-line no-console
         console.log('Severity:', issue.severity);
+        // eslint-disable-next-line no-console
         console.groupEnd();
       });
+      // eslint-disable-next-line no-console
       console.groupEnd();
     } else {
+      // eslint-disable-next-line no-console
       console.log('✅ No accessibility issues found!');
     }
     
+    // eslint-disable-next-line no-console
     console.groupEnd();
   }
 };

@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useState, useId } from 'react';
 import { Creator } from '../types/Creator';
-import { AccessibleButton, AccessibleFormField } from './Accessibility.tsx';
-import { useTranslation, useNumberFormat } from '../i18n/I18nProvider.tsx';
+import { AccessibleButton, AccessibleFormField } from './Accessibility';
+import { useTranslation, useNumberFormat } from '../i18n/I18nProvider';
 
 interface SearchAndFilterProps {
   onSearch: (query: string) => void;

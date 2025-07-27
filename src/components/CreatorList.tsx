@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Creator } from '../types/Creator';
-import AgencyModal from './AgencyModal.tsx';
-import { TableCaption } from './Accessibility.tsx';
+import AgencyModal from './AgencyModal';
+import { TableCaption } from './Accessibility';
 
 interface CreatorListProps {
   creators: Creator[];

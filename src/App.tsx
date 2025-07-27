@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Creator } from './types/Creator';
-import CreatorList from './components/CreatorList.tsx';
-import SearchAndFilter from './components/SearchAndFilter.tsx';
-import Footer from './components/Footer.tsx';
-import SEO from './components/SEO.tsx';
-import LanguageSwitcher from './components/LanguageSwitcher.tsx';
-import { SkipLink, LiveRegion, ProgressIndicator } from './components/Accessibility.tsx';
+import CreatorList from './components/CreatorList';
+import SearchAndFilter from './components/SearchAndFilter';
+import Footer from './components/Footer';
+import SEO from './components/SEO';
+import LanguageSwitcher from './components/LanguageSwitcher';
+import { SkipLink, LiveRegion, ProgressIndicator } from './components/Accessibility';
 import { HelmetProvider } from 'react-helmet-async';
-import { I18nProvider, useTranslation, useNumberFormat } from './i18n/I18nProvider.tsx';
+import { I18nProvider, useTranslation, useNumberFormat } from './i18n/I18nProvider';
 import Papa from 'papaparse';
 
 // Custom hook for data loading
@@ -61,7 +61,7 @@ const useCreatorData = () => {
             setLoadingProgress(100);
             setError(null);
           },
-          error: (error) => {
+          error: (error: Error) => {
             console.error('CSV parsing error:', error);
             setError(t('error.parsingData'));
           }

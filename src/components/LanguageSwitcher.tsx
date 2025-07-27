@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useTranslation, SupportedLanguage } from '../i18n/I18nProvider.tsx';
-import { AccessibleButton } from './Accessibility.tsx';
+import { useTranslation, SupportedLanguage } from '../i18n/I18nProvider';
+import { AccessibleButton } from './Accessibility';
 
 interface LanguageSwitcherProps {
   className?: string;

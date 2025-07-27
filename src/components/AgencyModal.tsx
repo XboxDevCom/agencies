@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Creator } from '../types/Creator';
-import { FocusTrap, AccessibleButton } from './Accessibility.tsx';
+import { FocusTrap, AccessibleButton } from './Accessibility';
 
 interface AgencyModalProps {
   agency: Creator | null;
