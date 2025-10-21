@@ -1,5 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback, useState, useId } from 'react';
 import { Creator } from '../types/Creator';
+import { AccessibleButton, AccessibleFormField } from './Accessibility';
+import { useTranslation, useNumberFormat } from '../i18n/I18nProvider';
 
 interface SearchAndFilterProps {
   onSearch: (query: string) => void;
@@ -15,35 +17,111 @@ interface SearchAndFilterProps {
 }
 
 const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterChange, data }) => {
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onSearch(e.target.value);
-  };
+  const { t } = useTranslation();
+  const formatNumber = useNumberFormat();
+  
+  const [localFilters, setLocalFilters] = useState({
+    platform: '',
+    status: '',
+    minFollowers: 0,
+    focus: '',
+    type: '',
+    pricing_model: ''
+  });
+  const [searchValue, setSearchValue] = useState('');
 
-  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+  // Generate unique IDs for form elements
+  const searchId = useId();
+  const typeId = useId();
+  const pricingId = useId();
+  const platformId = useId();
+  const focusId = useId();
+  const statusId = useId();
+  const followersId = useId();
+
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    onSearch(value);
+  }, [onSearch]);
+
+  const handleFilterChange = useCallback((e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = e.target;
-    onFilterChange({
-      [name]: value,
-    } as any);
-  };
+    const numericValue = name === 'minFollowers' ? parseInt(value) || 0 : value;
+    
+    const newFilters = {
+      ...localFilters,
+      [name]: numericValue,
+    };
+    
+    setLocalFilters(newFilters);
+    onFilterChange(newFilters);
+  }, [localFilters, onFilterChange]);
 
-  // Extract unique values for dropdowns
-  const uniquePlatforms = useMemo(() => {
-    const platforms = data.flatMap(agency => agency.platforms || []);
-    return Array.from(new Set(platforms)).sort();
+  const clearFilters = useCallback(() => {
+    const clearedFilters = {
+      platform: '',
+      status: '',
+      minFollowers: 0,
+      focus: '',
+      type: '',
+      pricing_model: ''
+    };
+    setLocalFilters(clearedFilters);
+    setSearchValue('');
+    onFilterChange(clearedFilters);
+    onSearch('');
+    
+    // Focus zurück auf Suchfeld
+    document.getElementById(searchId)?.focus();
+  }, [onFilterChange, onSearch, searchId]);
+
+  // Memoized unique values for dropdowns
+  const filterOptions = useMemo(() => {
+    const platforms = new Set<string>();
+    const focus = new Set<string>();
+    const locations = new Set<string>();
+    const legalForms = new Set<string>();
+
+    data.forEach(agency => {
+      agency.platforms?.forEach(platform => platforms.add(platform));
+      agency.focus?.forEach(f => focus.add(f));
+      if (agency.location) locations.add(agency.location);
+      if (agency.legal_form) legalForms.add(agency.legal_form);
+    });
+
+    return {
+      platforms: Array.from(platforms).sort(),
+      focus: Array.from(focus).sort(),
+      locations: Array.from(locations).sort(),
+      legalForms: Array.from(legalForms).sort()
+    };
   }, [data]);
 
-  const uniqueFocus = useMemo(() => {
-    const focus = data.flatMap(agency => agency.focus || []);
-    return Array.from(new Set(focus)).sort();
-  }, [data]);
+  const hasActiveFilters = useMemo(() => {
+    return Object.values(localFilters).some(value => 
+      value !== '' && value !== 0
+    ) || searchValue !== '';
+  }, [localFilters, searchValue]);
+
+  const activeFilterCount = useMemo(() => {
+    return Object.values(localFilters).filter(value => value !== '' && value !== 0).length + 
+           (searchValue ? 1 : 0);
+  }, [localFilters, searchValue]);
 
   return (
-    <div className="space-y-3 sm:space-y-4">
-      <div>
-        <label htmlFor="search" className="sr-only">
-          Search
-        </label>
-        <div className="relative rounded-md shadow-sm">
+    <div className="space-y-4" role="search" aria-labelledby="search-heading">
+      <h3 id="search-heading" className="sr-only">
+        {t('filters.title')}
+      </h3>
+
+      {/* Search Bar */}
+      <AccessibleFormField
+        id={searchId}
+        label={t('search.label')}
+        helpText={t('search.helpText')}
+      >
+        <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg
               className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400"
@@ -60,119 +138,209 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ onSearch, onFilterCha
             </svg>
           </div>
           <input
-            type="text"
-            name="search"
-            id="search"
+            type="search"
+            value={searchValue}
             className="focus:ring-green-500 focus:border-green-500 block w-full pl-8 sm:pl-10 pr-3 py-2 sm:py-2.5 text-sm border-gray-600 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
-            placeholder="Search by name or email..."
+            placeholder={t('search.placeholder')}
             onChange={handleSearchChange}
+            autoComplete="off"
           />
         </div>
-      </div>
+      </AccessibleFormField>
 
-      <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
-          <label htmlFor="type" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
-            Agency Type
-          </label>
-          <select
-            id="type"
-            name="type"
-            className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
-            onChange={handleFilterChange}
+      {/* Filter Controls */}
+      <fieldset className="space-y-4">
+        <legend className="text-sm font-medium text-gray-300 mb-3">
+          {t('filters.title')}
+          {activeFilterCount > 0 && (
+            <span className="ml-2 text-xs text-green-400">
+              {t('filters.activeCount', { count: activeFilterCount })}
+            </span>
+          )}
+        </legend>
+
+        <div className="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          {/* Agency Type */}
+          <AccessibleFormField
+            id={typeId}
+            label={t('filters.agencyType')}
+            helpText={t('filters.agencyType.help')}
           >
-            <option value="">All Types</option>
-            <option value="exclusive">Exclusive</option>
-            <option value="mass">Mass</option>
-          </select>
-        </div>
+            <select
+              name="type"
+              value={localFilters.type}
+              className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
+              onChange={handleFilterChange}
+            >
+              <option value="">{t('common.all')} {t('filters.agencyType')}</option>
+              <option value="exclusive">{t('agency.type.exclusive')}</option>
+              <option value="mass">{t('agency.type.mass')}</option>
+            </select>
+          </AccessibleFormField>
 
-        <div>
-          <label htmlFor="pricing_model" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
-            Pricing Model
-          </label>
-          <select
-            id="pricing_model"
-            name="pricing_model"
-            className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
-            onChange={handleFilterChange}
+          {/* Pricing Model */}
+          <AccessibleFormField
+            id={pricingId}
+            label={t('filters.pricingModel')}
+            helpText={t('filters.pricingModel.help')}
           >
-            <option value="">All Pricing Models</option>
-            <option value="commission">Commission</option>
-            <option value="base_fee">Base Fee</option>
-          </select>
-        </div>
+            <select
+              name="pricing_model"
+              value={localFilters.pricing_model}
+              className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
+              onChange={handleFilterChange}
+            >
+              <option value="">{t('common.all')} {t('filters.pricingModel')}</option>
+              <option value="commission">{t('agency.pricing.commission')}</option>
+              <option value="base_fee">{t('agency.pricing.baseFee')}</option>
+            </select>
+          </AccessibleFormField>
 
-        <div>
-          <label htmlFor="platform" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
-            Platform
-          </label>
-          <select
-            id="platform"
-            name="platform"
-            className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
-            onChange={handleFilterChange}
+          {/* Platform */}
+          <AccessibleFormField
+            id={platformId}
+            label={t('filters.platform')}
+            helpText={t('filters.platform.help')}
           >
-            <option value="">All Platforms</option>
-            {uniquePlatforms.map((platform) => (
-              <option key={platform} value={platform}>
-                {platform}
-              </option>
-            ))}
-          </select>
-        </div>
+            <select
+              name="platform"
+              value={localFilters.platform}
+              className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
+              onChange={handleFilterChange}
+            >
+              <option value="">{t('common.all')} {t('filters.platform')}</option>
+              {filterOptions.platforms.map((platform) => (
+                <option key={platform} value={platform}>
+                  {platform}
+                </option>
+              ))}
+            </select>
+          </AccessibleFormField>
 
-        <div>
-          <label htmlFor="focus" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
-            Focus
-          </label>
-          <select
-            id="focus"
-            name="focus"
-            className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
-            onChange={handleFilterChange}
+          {/* Focus */}
+          <AccessibleFormField
+            id={focusId}
+            label={t('filters.focus')}
+            helpText={t('filters.focus.help')}
           >
-            <option value="">All Focus Areas</option>
-            {uniqueFocus.map((focus) => (
-              <option key={focus} value={focus}>
-                {focus}
-              </option>
-            ))}
-          </select>
-        </div>
+            <select
+              name="focus"
+              value={localFilters.focus}
+              className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
+              onChange={handleFilterChange}
+            >
+              <option value="">{t('common.all')} {t('filters.focus')}</option>
+              {filterOptions.focus.map((focus) => (
+                <option key={focus} value={focus}>
+                  {focus}
+                </option>
+              ))}
+            </select>
+          </AccessibleFormField>
 
-        <div>
-          <label htmlFor="status" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
-            Status
-          </label>
-          <select
-            id="status"
-            name="status"
-            className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
-            onChange={handleFilterChange}
+          {/* Status */}
+          <AccessibleFormField
+            id={statusId}
+            label={t('filters.status')}
+            helpText={t('filters.status.help')}
           >
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
+            <select
+              name="status"
+              value={localFilters.status}
+              className="block w-full pl-3 pr-10 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
+              onChange={handleFilterChange}
+            >
+              <option value="">{t('common.all')} {t('filters.status')}</option>
+              <option value="active">{t('agency.status.active')}</option>
+              <option value="inactive">{t('agency.status.inactive')}</option>
+            </select>
+          </AccessibleFormField>
+
+          {/* Min Followers */}
+          <AccessibleFormField
+            id={followersId}
+            label={t('filters.minFollowers')}
+            helpText={t('filters.minFollowers.help')}
+          >
+            <input
+              type="number"
+              name="minFollowers"
+              min="0"
+              step="1000"
+              value={localFilters.minFollowers || ''}
+              placeholder="z.B. 10000"
+              className="block w-full pl-3 pr-3 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200 placeholder-gray-400"
+              onChange={handleFilterChange}
+            />
+          </AccessibleFormField>
         </div>
 
-        <div>
-          <label htmlFor="minFollowers" className="block text-xs sm:text-sm font-medium text-gray-300 mb-1">
-            Min. Followers
-          </label>
-          <input
-            type="number"
-            name="minFollowers"
-            id="minFollowers"
-            min="0"
-            className="block w-full pl-3 pr-3 py-1.5 sm:py-2 text-sm border-gray-600 focus:outline-none focus:ring-green-500 focus:border-green-500 rounded-md bg-gray-700 text-gray-200"
-            onChange={handleFilterChange}
-          />
+        {/* Clear Filters Button */}
+        {hasActiveFilters && (
+          <div className="flex justify-end pt-2">
+            <AccessibleButton
+              onClick={clearFilters}
+              variant="secondary"
+              size="sm"
+              ariaLabel={t('filters.clearAll') + ` (${activeFilterCount})`}
+            >
+              <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              {t('filters.clearAll')} ({activeFilterCount})
+            </AccessibleButton>
+          </div>
+        )}
+      </fieldset>
+
+      {/* Active Filters Display */}
+      {hasActiveFilters && (
+        <div className="bg-gray-700 rounded-md p-3" role="status" aria-live="polite">
+          <h4 className="text-sm font-medium text-gray-300 mb-2">
+            {t('filters.activeFilters')}
+          </h4>
+          <div className="flex flex-wrap gap-2">
+            {searchValue && (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-900 text-green-200">
+                {t('search.label')}: "{searchValue}"
+              </span>
+            )}
+            {Object.entries(localFilters).map(([key, value]) => {
+              if (!value || value === 0) return null;
+              
+              let displayValue: string;
+              
+              switch (key) {
+                case 'type':
+                  displayValue = value === 'exclusive' ? t('agency.type.exclusive') : t('agency.type.mass');
+                  break;
+                case 'pricing_model':
+                  displayValue = value === 'commission' ? t('agency.pricing.commission') : t('agency.pricing.baseFee');
+                  break;
+                case 'status':
+                  displayValue = value === 'active' ? t('agency.status.active') : t('agency.status.inactive');
+                  break;
+                case 'minFollowers':
+                  displayValue = `Min. ${formatNumber(value as number)} Follower`;
+                  break;
+                default:
+                  displayValue = String(value);
+              }
+              
+              return (
+                <span
+                  key={key}
+                  className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-900 text-blue-200"
+                >
+                  {t(`filters.${key}` as any)}: {displayValue}
+                </span>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
 
-export default SearchAndFilter; 
+export default SearchAndFilter;
