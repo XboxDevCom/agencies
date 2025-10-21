@@ -163,10 +163,10 @@ const AppContent: React.FC = () => {
       
       return (
         (filters.platform === '' || (creator.platforms || []).some(platform => 
-          platform.toLowerCase().includes(filters.platform.toLowerCase())
+          platform && platform.toLowerCase().includes(filters.platform.toLowerCase())
         )) &&
         (filters.focus === '' || (creator.focus || []).some(f => 
-          f.toLowerCase().includes(filters.focus.toLowerCase())
+          f && f.toLowerCase().includes(filters.focus.toLowerCase())
         )) &&
         (filters.status === '' || creator.status === filters.status) &&
         (filters.type === '' || creator.type === filters.type) &&
