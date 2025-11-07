@@ -6,7 +6,7 @@ import { InvestmentCompany } from '../types/Investment';
  */
 export const GAMING_COMPANIES: InvestmentCompany[] = [
   {
-    id: 'MSFT',
+    id: 'MSFT-GAMING',
     name: 'Microsoft Corporation',
     ticker: 'MSFT',
     sector: 'gaming',

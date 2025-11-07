@@ -136,15 +136,19 @@ export function calculateInvestmentNeeded(
  * Validate investment company data
  */
 export function validateInvestmentCompany(
-  company: any
+  company: unknown
 ): company is InvestmentCompany {
+  if (!company || typeof company !== 'object') return false;
+  
+  const c = company as Record<string, unknown>;
+  
   return (
-    typeof company.id === 'string' &&
-    typeof company.name === 'string' &&
-    typeof company.ticker === 'string' &&
-    ['gaming', 'tech', 'infrastructure'].includes(company.sector) &&
-    typeof company.marketCap === 'number' &&
-    typeof company.dividendYield === 'number' &&
-    typeof company.price === 'number'
+    typeof c.id === 'string' &&
+    typeof c.name === 'string' &&
+    typeof c.ticker === 'string' &&
+    ['gaming', 'tech', 'infrastructure'].includes(c.sector as string) &&
+    typeof c.marketCap === 'number' &&
+    typeof c.dividendYield === 'number' &&
+    typeof c.price === 'number'
   );
 }
