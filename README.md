@@ -2,6 +2,13 @@
 
 Eine barrierefreie und übersichtliche Tabelle von Creator-Agenturen im DACH-Raum (Deutschland, Österreich, Schweiz). Diese Anwendung bietet eine einfache und zugängliche Möglichkeit, Agenturen nach verschiedenen Kriterien zu filtern und zu sortieren.
 
+## 📸 Screenshots
+
+### Hauptansicht
+![Creator Agencies Main View](https://github.com/user-attachments/assets/30593dad-5493-4e39-8290-56b211c758c1)
+
+*Übersichtliche Darstellung aller Creator-Agenturen mit umfangreichen Filter- und Sortierfunktionen*
+
 ## ♿ Barrierefreiheit (Accessibility)
 
 Diese Anwendung wurde nach den **WCAG 2.1 AA Standards** entwickelt und bietet:
