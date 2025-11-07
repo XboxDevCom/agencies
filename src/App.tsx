@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Creator } from './types/Creator';
 import CreatorList from './components/CreatorList';
 import SearchAndFilter from './components/SearchAndFilter';
 import Footer from './components/Footer';
 import SEO from './components/SEO';
 import LanguageSwitcher from './components/LanguageSwitcher';
+import Navigation from './components/Navigation';
+import InvestorTips from './components/InvestorTips';
+import DividendCalculator from './components/DividendCalculator';
 import { SkipLink, LiveRegion, ProgressIndicator } from './components/Accessibility';
 import { HelmetProvider } from 'react-helmet-async';
 import { I18nProvider, useTranslation, useNumberFormat } from './i18n/I18nProvider';
@@ -125,7 +129,7 @@ const AppContent: React.FC = () => {
     }
   }, [t]);
 
-  const handleFilterChange = useCallback((newFilters: typeof filters) => {
+  const handleFilterChange = useCallback((newFilters: Partial<typeof filters>) => {
     setFilters(prevFilters => {
       const updatedFilters = { ...prevFilters, ...newFilters };
       const activeFilters = Object.entries(updatedFilters)
@@ -288,6 +292,9 @@ const AppContent: React.FC = () => {
         {announcements}
       </LiveRegion>
 
+      {/* Navigation */}
+      <Navigation />
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex-grow">
         <header className="mb-4 sm:mb-6 lg:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div className="flex-1">
@@ -355,7 +362,27 @@ function App() {
   return (
     <HelmetProvider>
       <I18nProvider>
-        <AppContent />
+        <Router>
+          <div className="min-h-screen bg-gray-900">
+            <Routes>
+              <Route path="/" element={<AppContent />} />
+              <Route path="/investor-tips" element={
+                <div className="min-h-screen bg-gray-900 flex flex-col">
+                  <Navigation />
+                  <InvestorTips />
+                  <Footer />
+                </div>
+              } />
+              <Route path="/dividend-calculator" element={
+                <div className="min-h-screen bg-gray-900 flex flex-col">
+                  <Navigation />
+                  <DividendCalculator />
+                  <Footer />
+                </div>
+              } />
+            </Routes>
+          </div>
+        </Router>
       </I18nProvider>
     </HelmetProvider>
   );
