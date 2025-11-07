@@ -125,7 +125,7 @@ const AppContent: React.FC = () => {
     }
   }, [t]);
 
-  const handleFilterChange = useCallback((newFilters: typeof filters) => {
+  const handleFilterChange = useCallback((newFilters: Partial<typeof filters>) => {
     setFilters(prevFilters => {
       const updatedFilters = { ...prevFilters, ...newFilters };
       const activeFilters = Object.entries(updatedFilters)
