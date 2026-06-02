@@ -1,8 +1,26 @@
 const fs = require('fs');
 const path = require('path');
+const ts = require('typescript');
 
 // Import translation files
 const translationsDir = path.join(__dirname, '../src/i18n/translations');
+
+// Load a translation `.ts` module by transpiling it to CommonJS and evaluating
+// it in an isolated scope. Type-only imports (e.g. TranslationKeys) are stripped
+// by the TS compiler, and a no-op require shim keeps any stray import harmless.
+function loadTranslationModule(filePath, lang) {
+  const source = fs.readFileSync(filePath, 'utf8');
+  const { outputText } = ts.transpileModule(source, {
+    compilerOptions: { module: 'CommonJS', target: 'ES2020' },
+  });
+  const moduleShim = { exports: {} };
+  new Function('module', 'exports', 'require', outputText)(
+    moduleShim,
+    moduleShim.exports,
+    () => ({})
+  );
+  return moduleShim.exports[lang] || moduleShim.exports.default;
+}
 
 async function validateTranslations() {
   console.log('🌍 Validating translations...\n');
@@ -21,44 +39,37 @@ async function validateTranslations() {
     // Load all translations
     const translations = {};
     const allKeys = new Set();
+    let hasLoadErrors = false;
 
     for (const file of files) {
       const lang = path.basename(file, '.ts');
       const filePath = path.join(translationsDir, file);
       
       try {
-        // Read and parse the TypeScript file
-        const content = fs.readFileSync(filePath, 'utf8');
-        
-        // Extract the translation object (simplified parsing)
-        const match = content.match(/export const \w+: TranslationKeys = ({[\s\S]*?});/);
-        if (!match) {
-          console.error(`❌ Could not parse translation object in ${file}`);
+        const translationObj = loadTranslationModule(filePath, lang);
+
+        if (!translationObj || typeof translationObj !== 'object') {
+          console.error(`❌ Could not load translation object in ${file}`);
+          hasLoadErrors = true;
           continue;
         }
 
-        // Convert to JSON-like format for parsing
-        const objString = match[1]
-          .replace(/'/g, '"')
-          .replace(/(\w+):/g, '"$1":')
-          .replace(/,\s*}/g, '}');
-
-        const translationObj = JSON.parse(objString);
         translations[lang] = translationObj;
 
         // Collect all keys
         Object.keys(translationObj).forEach(key => allKeys.add(key));
-        
+
         console.log(`✅ Loaded ${Object.keys(translationObj).length} keys for ${lang}`);
       } catch (error) {
         console.error(`❌ Error loading ${file}:`, error.message);
+        hasLoadErrors = true;
       }
     }
 
     console.log(`\n📊 Total unique keys: ${allKeys.size}\n`);
 
     // Validation checks
-    let hasErrors = false;
+    let hasErrors = hasLoadErrors;
     const languages = Object.keys(translations);
 
     // Check 1: All languages have the same keys

@@ -1,11 +1,21 @@
 {
-  "timestamp": "2026-06-02T18:19:30.026Z",
-  "languages": [],
-  "totalKeys": 0,
+  "timestamp": "2026-06-02T18:30:11.715Z",
+  "languages": [
+    "de",
+    "en",
+    "fr",
+    "it"
+  ],
+  "totalKeys": 111,
   "summary": {
-    "totalTranslations": 0,
-    "averageKeysPerLanguage": null,
+    "totalTranslations": 444,
+    "averageKeysPerLanguage": 111,
     "hasErrors": false
   },
-  "keysByLanguage": {}
+  "keysByLanguage": {
+    "de": 111,
+    "en": 111,
+    "fr": 111,
+    "it": 111
+  }
 }
