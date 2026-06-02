@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useTranslation, SupportedLanguage } from '../i18n/I18nProvider';
+import { useTranslation, type SupportedLanguage } from '../i18n/context';
 import { AccessibleButton } from './Accessibility';
 
 interface LanguageSwitcherProps {

@@ -9,7 +9,8 @@ import LanguageSwitcher from './components/LanguageSwitcher';
 import Navigation from './components/Navigation';
 import { SkipLink, LiveRegion, ProgressIndicator } from './components/Accessibility';
 import { HelmetProvider } from 'react-helmet-async';
-import { I18nProvider, useTranslation, useNumberFormat } from './i18n/I18nProvider';
+import { I18nProvider } from './i18n/I18nProvider';
+import { useTranslation, useNumberFormat } from './i18n/context';
 import Papa from 'papaparse';
 
 // Secondary routes are code-split so they don't weigh down the initial bundle.

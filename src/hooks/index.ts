@@ -280,3 +280,49 @@ export const usePrevious = <T>(value: T): T | undefined => {
   });
   return ref.current;
 };
+
+// Custom hook for keyboard list navigation (arrow keys, Enter, Home/End)
+export const useKeyboardNavigation = (
+  items: any[],
+  onSelect: (item: any) => void,
+  isActive: boolean = true
+) => {
+  const [focusedIndex, setFocusedIndex] = useState(0);
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          setFocusedIndex(prev => Math.min(prev + 1, items.length - 1));
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          setFocusedIndex(prev => Math.max(prev - 1, 0));
+          break;
+        case 'Enter':
+        case ' ':
+          e.preventDefault();
+          if (items[focusedIndex]) {
+            onSelect(items[focusedIndex]);
+          }
+          break;
+        case 'Home':
+          e.preventDefault();
+          setFocusedIndex(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          setFocusedIndex(items.length - 1);
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [items, focusedIndex, onSelect, isActive]);
+
+  return { focusedIndex, setFocusedIndex };
+};

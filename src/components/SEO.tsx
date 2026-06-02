@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useTranslation, type SupportedLanguage } from '../i18n/I18nProvider';
+import { useTranslation, type SupportedLanguage } from '../i18n/context';
 
 interface SEOProps {
   title?: string;
