@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Creator } from './types/Creator';
 import CreatorList from './components/CreatorList';
@@ -7,12 +7,31 @@ import Footer from './components/Footer';
 import SEO from './components/SEO';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import Navigation from './components/Navigation';
-import InvestorTips from './components/InvestorTips';
-import DividendCalculator from './components/DividendCalculator';
 import { SkipLink, LiveRegion, ProgressIndicator } from './components/Accessibility';
 import { HelmetProvider } from 'react-helmet-async';
 import { I18nProvider, useTranslation, useNumberFormat } from './i18n/I18nProvider';
 import Papa from 'papaparse';
+
+// Secondary routes are code-split so they don't weigh down the initial bundle.
+const InvestorTips = lazy(() => import('./components/InvestorTips'));
+const DividendCalculator = lazy(() => import('./components/DividendCalculator'));
+
+// Shared page shell for the secondary routes.
+const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="min-h-screen bg-gray-900 flex flex-col">
+    <Navigation />
+    <Suspense
+      fallback={
+        <div className="flex-grow flex items-center justify-center" role="status">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500" />
+        </div>
+      }
+    >
+      {children}
+    </Suspense>
+    <Footer />
+  </div>
+);
 
 // Custom hook for data loading
 const useCreatorData = () => {
@@ -150,7 +169,7 @@ const AppContent: React.FC = () => {
   const filteredAndSortedCreators = useMemo(() => {
     if (!creators.length) return [];
 
-    let filtered = creators.filter(creator => {
+    const filtered = creators.filter(creator => {
       if (!creator) return false;
       
       // Search functionality
@@ -367,18 +386,24 @@ function App() {
             <Routes>
               <Route path="/" element={<AppContent />} />
               <Route path="/investor-tips" element={
-                <div className="min-h-screen bg-gray-900 flex flex-col">
-                  <Navigation />
+                <PageLayout>
+                  <SEO
+                    title="Investor-Tipps – Creator Agencies"
+                    description="Praktische Tipps und Ressourcen für Investoren im Creator-Economy- und Venture-Capital-Umfeld."
+                    path="/investor-tips"
+                  />
                   <InvestorTips />
-                  <Footer />
-                </div>
+                </PageLayout>
               } />
               <Route path="/dividend-calculator" element={
-                <div className="min-h-screen bg-gray-900 flex flex-col">
-                  <Navigation />
+                <PageLayout>
+                  <SEO
+                    title="Dividenden-Rechner – Creator Agencies"
+                    description="Berechne Dividendenrenditen und plane deine Investments mit dem interaktiven Dividenden-Rechner."
+                    path="/dividend-calculator"
+                  />
                   <DividendCalculator />
-                  <Footer />
-                </div>
+                </PageLayout>
               } />
             </Routes>
           </div>

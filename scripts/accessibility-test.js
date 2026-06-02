@@ -2,9 +2,42 @@ const puppeteer = require('puppeteer');
 const axeCore = require('axe-core');
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
+
+const MIME_TYPES = {
+  '.html': 'text/html',
+  '.js': 'text/javascript',
+  '.css': 'text/css',
+  '.json': 'application/json',
+  '.csv': 'text/csv',
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.ico': 'image/x-icon',
+};
+
+// Serve the production build over HTTP so absolute asset paths (/static/...)
+// resolve correctly — file:// can't load them.
+function startStaticServer(rootDir) {
+  return new Promise((resolve) => {
+    const server = http.createServer((req, res) => {
+      const urlPath = decodeURIComponent((req.url || '/').split('?')[0]);
+      let filePath = path.join(rootDir, urlPath === '/' ? 'index.html' : urlPath);
+      if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
+        filePath = path.join(rootDir, 'index.html'); // SPA fallback
+      }
+      const ext = path.extname(filePath).toLowerCase();
+      res.writeHead(200, { 'Content-Type': MIME_TYPES[ext] || 'application/octet-stream' });
+      fs.createReadStream(filePath).pipe(res);
+    });
+    server.listen(0, '127.0.0.1', () => resolve(server));
+  });
+}
 
 async function runAccessibilityTests() {
   console.log('🔍 Starting accessibility tests...\n');
+
+  const server = await startStaticServer(path.join(__dirname, '../build'));
+  const { port } = server.address();
 
   const browser = await puppeteer.launch({
     headless: 'new',
@@ -13,13 +46,12 @@ async function runAccessibilityTests() {
 
   try {
     const page = await browser.newPage();
-    
+
     // Set viewport for consistent testing
     await page.setViewport({ width: 1200, height: 800 });
 
     // Navigate to the built application
-    const buildPath = path.join(__dirname, '../build/index.html');
-    await page.goto(`file://${buildPath}`);
+    await page.goto(`http://127.0.0.1:${port}/`);
 
     // Mock CSV data to prevent error state
     await page.evaluate(() => {
@@ -208,6 +240,7 @@ Another Agency,https://another.com,mass,base_fee,UG,Munich,2021,Sales,Lifestyle,
     process.exit(1);
   } finally {
     await browser.close();
+    server.close();
   }
 }
 

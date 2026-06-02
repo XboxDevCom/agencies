@@ -192,7 +192,7 @@ export const formatDate = (date: Date, language: SupportedLanguage): string => {
 };
 
 // Helper function to get text direction
-export const getTextDirection = (language: SupportedLanguage): 'ltr' | 'rtl' => {
+export const getTextDirection = (_language: SupportedLanguage): 'ltr' | 'rtl' => {
   // All supported languages are left-to-right
   return 'ltr';
 };

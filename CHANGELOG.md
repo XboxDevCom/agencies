@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-06-02
+
+### 🚀 Build & Tooling
+
+- **build**: Migrated from Create React App (react-scripts, unmaintained) to **Vite 8** — dev start and production builds are dramatically faster
+- **test**: Replaced Jest with **Vitest 4** (jsdom environment, v8 coverage)
+- **lint**: Migrated ESLint to flat config (ESLint 9, typescript-eslint 8) while keeping the full `jsx-a11y` ruleset
+- **deps**: TypeScript 4.9 → 5.9, React Router 6 → 7, papaparse/testing-library and other dependencies updated
+- **security**: Removed CRA's transitive vulnerability chain — `npm audit` now reports **0 vulnerabilities**
+- **ci**: Updated GitHub Actions to Node 22; build output keeps the `build/static/{js,css}` layout for compatibility
+
+### ⚡ Performance
+
+- **bundle**: Code-split the `/investor-tips` and `/dividend-calculator` routes via `React.lazy` so they no longer load on first paint
+- **bundle**: Split long-lived vendor code (React, React Router) and papaparse into separately cacheable chunks
+
+### 🔍 SEO
+
+- **seo**: Default document language set to `de`; language-aware `og:locale` and `hreflang` alternates
+- **seo**: Added schema.org JSON-LD structured data, `robots.txt` and `sitemap.xml`
+- **seo**: Per-route canonical URLs and meta tags (incl. the previously meta-less secondary routes), `og:image` tags
+
 ## [1.1.0] - 2025-07-27
 
 ### ✨ Features

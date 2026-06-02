@@ -44,11 +44,12 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className = '' }) =
           setIsOpen(false);
           buttonRef.current?.focus();
           break;
-        case 'ArrowDown':
+        case 'ArrowDown': {
           event.preventDefault();
           const firstOption = dropdownRef.current?.querySelector('[role="menuitem"]') as HTMLElement;
           firstOption?.focus();
           break;
+        }
       }
     };
 
@@ -102,7 +103,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className = '' }) =
           aria-labelledby="language-menu-button"
         >
           <div className="py-1">
-            {availableLanguages.map((lang, index) => {
+            {availableLanguages.map((lang) => {
               const langInfo = languageInfo[lang];
               const isSelected = lang === language;
               
@@ -118,27 +119,31 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ className = '' }) =
                   onClick={() => handleLanguageChange(lang)}
                   onKeyDown={(e) => {
                     switch (e.key) {
-                      case 'ArrowDown':
+                      case 'ArrowDown': {
                         e.preventDefault();
                         const nextButton = e.currentTarget.nextElementSibling as HTMLElement;
                         nextButton?.focus();
                         break;
-                      case 'ArrowUp':
+                      }
+                      case 'ArrowUp': {
                         e.preventDefault();
                         const prevButton = e.currentTarget.previousElementSibling as HTMLElement;
                         prevButton?.focus();
                         break;
-                      case 'Home':
+                      }
+                      case 'Home': {
                         e.preventDefault();
                         const firstButton = dropdownRef.current?.querySelector('[role="menuitem"]') as HTMLElement;
                         firstButton?.focus();
                         break;
-                      case 'End':
+                      }
+                      case 'End': {
                         e.preventDefault();
                         const buttons = dropdownRef.current?.querySelectorAll('[role="menuitem"]');
                         const lastButton = buttons?.[buttons.length - 1] as HTMLElement;
                         lastButton?.focus();
                         break;
+                      }
                     }
                   }}
                   aria-label={t('language.switch', { language: langInfo.nativeName })}

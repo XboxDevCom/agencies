@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://agencies.xboxdev.com/sitemap.xml
