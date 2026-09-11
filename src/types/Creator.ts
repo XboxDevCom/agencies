@@ -1,6 +1,6 @@
-export type AgencyType = 'exclusive' | 'mass';
-export type PricingModel = 'commission' | 'base_fee';
-export type AgencyStatus = 'active' | 'inactive';
+export type AgencyType = 'exclusive' | 'mass' | 'unknown';
+export type PricingModel = 'commission' | 'base_fee' | 'unknown';
+export type AgencyStatus = 'active' | 'inactive' | 'unknown';
 export type LegalForm = 'Einzelperson' | 'GmbH' | 'UG' | 'AG' | 'KG' | 'OHG' | 'GmbH & Co. KG';
 
 export interface Creator {
@@ -12,14 +12,18 @@ export interface Creator {
   platforms: string[];
   references: string[];
   conditions: string[];
-  followers: number;
+  followers: number | null;
   status: AgencyStatus;
+  country?: string;
+  source_urls?: string[];
+  checked_at?: string;
+  verified_fields?: string[];
   notes?: string;
   description: string;
   departments: string[];
-  legal_form: LegalForm;
+  legal_form: LegalForm | '';
   location: string;
-  founding_year: number;
+  founding_year: number | null;
 }
 
 export interface FilterOptions {
@@ -29,6 +33,7 @@ export interface FilterOptions {
   focus: string;
   type: string;
   pricing_model: string;
+  country?: string;
 }
 
 export interface SortConfig {
@@ -117,17 +122,20 @@ export interface SearchEvent {
 // Constants
 export const AGENCY_TYPES: Record<AgencyType, string> = {
   exclusive: 'Exklusiv',
-  mass: 'Masse'
+  mass: 'Offenes Netzwerk',
+  unknown: 'Nicht belegt'
 };
 
 export const PRICING_MODELS: Record<PricingModel, string> = {
   commission: 'Provision',
-  base_fee: 'Grundgebühr'
+  base_fee: 'Grundgebühr',
+  unknown: 'Nicht belegt'
 };
 
 export const AGENCY_STATUS: Record<AgencyStatus, string> = {
   active: 'Aktiv',
-  inactive: 'Inaktiv'
+  inactive: 'Inaktiv',
+  unknown: 'Nicht belegt'
 };
 
 export const LEGAL_FORMS: Record<LegalForm, string> = {
@@ -144,20 +152,20 @@ export const LEGAL_FORMS: Record<LegalForm, string> = {
 export const DEFAULT_CREATOR: Creator = {
   agency: '',
   url: '',
-  type: 'mass',
-  pricing_model: 'commission',
+  type: 'unknown',
+  pricing_model: 'unknown',
   focus: [],
   platforms: [],
   references: [],
   conditions: [],
-  followers: 0,
-  status: 'active',
+  followers: null,
+  status: 'unknown',
   notes: '',
   description: '',
   departments: [],
-  legal_form: 'GmbH',
+  legal_form: '',
   location: '',
-  founding_year: new Date().getFullYear()
+  founding_year: null
 };
 
 export const DEFAULT_FILTERS: FilterOptions = {

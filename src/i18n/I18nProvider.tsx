@@ -199,7 +199,8 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({
     }
 
     // Check localStorage
-    const storedLang = localStorage.getItem(STORAGE_KEY) as SupportedLanguage;
+    let storedLang: SupportedLanguage | null = null;
+    try { storedLang = localStorage.getItem(STORAGE_KEY) as SupportedLanguage; } catch { /* Storage is optional. */ }
     if (storedLang && Object.keys(translations).includes(storedLang)) {
       return storedLang;
     }
@@ -216,12 +217,12 @@ export const I18nProvider: React.FC<I18nProviderProps> = ({
     // Update URL parameter without page reload
     const url = new URL(window.location.href);
     url.searchParams.set('lang', language);
-    window.history.replaceState({}, '', url.toString());
+    window.history.replaceState(window.history.state, '', url.toString());
   }, [language]);
 
   const setLanguage = useCallback((newLanguage: SupportedLanguage) => {
     setLanguageState(newLanguage);
-    localStorage.setItem(STORAGE_KEY, newLanguage);
+    try { localStorage.setItem(STORAGE_KEY, newLanguage); } catch { /* Storage is optional. */ }
     
     // Announce language change to screen readers
     const announcement = translations[newLanguage]['language.current'].replace('{{language}}', translations[newLanguage][`language.${newLanguage}` as keyof typeof translations[typeof newLanguage]]);
