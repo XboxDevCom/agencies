@@ -1,81 +1,27 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Creator, FilterOptions, SortConfig } from '../types/Creator';
-import { debounce, filterCreators, sortCreators, parseCreatorData, storage } from '../utils';
-import Papa from 'papaparse';
+import { debounce, filterCreators, sortCreators, parseCreatorCSV, storage } from '../utils';
 
 // Custom hook for data loading with error handling and caching
 export const useCreatorData = () => {
   const [creators, setCreators] = useState<Creator[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-
+  const [attempt, setAttempt] = useState(0);
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        // Try to load from cache first
-        const cachedData = storage.get<{ data: Creator[]; timestamp: number }>('creators_cache', { data: [], timestamp: 0 });
-        const cacheExpiry = 5 * 60 * 1000; // 5 minutes
-
-        if (cachedData && cachedData.data.length > 0 && Date.now() - cachedData.timestamp < cacheExpiry) {
-          setCreators(cachedData.data);
-          setLastUpdated(new Date(cachedData.timestamp));
-          setLoading(false);
-          return;
-        }
-
-        const response = await fetch('/data.csv');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const csvData = await response.text();
-        
-        Papa.parse(csvData, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (results) => {
-            if (results.errors.length > 0) {
-              console.warn('CSV parsing warnings:', results.errors);
-            }
-            
-            const parsedData = parseCreatorData(results.data);
-            setCreators(parsedData);
-            setLastUpdated(new Date());
-            
-            // Cache the data
-            storage.set('creators_cache', {
-              data: parsedData,
-              timestamp: Date.now()
-            });
-            
-            setError(null);
-          },
-          error: (error: any) => {
-            console.error('CSV parsing error:', error);
-            setError('Failed to parse CSV data');
-          }
-        });
-      } catch (err) {
-        console.error('Error loading data:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, []);
-
-  const refreshData = useCallback(() => {
-    storage.remove('creators_cache');
-    window.location.reload();
-  }, []);
-
-  return { creators, loading, error, lastUpdated, refreshData };
+    const controller = new AbortController();
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+    fetch(`${process.env.PUBLIC_URL || ''}/data.csv`, { signal: controller.signal, cache: 'no-cache' })
+      .then(response => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.text(); })
+      .then(csv => { const data = parseCreatorCSV(csv); if (!cancelled) setCreators(data); })
+      .catch(err => { if (!cancelled) setError(err instanceof Error ? err.message : 'Data unavailable'); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; controller.abort(); };
+  }, [attempt]);
+  const refreshData = useCallback(() => setAttempt(previous => previous + 1), []);
+  return { creators, loading, error, refreshData };
 };
 
 // Custom hook for search functionality with debouncing
@@ -116,7 +62,8 @@ export const useCreatorFiltering = (creators: Creator[]) => {
   });
 
   // Debounced search
-  const { debouncedQuery } = useSearch(searchQuery);
+  const { debouncedQuery, setQuery } = useSearch(searchQuery);
+  useEffect(() => { setQuery(searchQuery); }, [searchQuery, setQuery]);
 
   // Memoized filtered and sorted data
   const filteredAndSortedCreators = useMemo(() => {

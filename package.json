@@ -19,10 +19,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xboxdevcom/creator-agencies.git"
+    "url": "https://github.com/XboxDevCom/agencies.git"
   },
   "bugs": {
-    "url": "https://github.com/xboxdevcom/creator-agencies/issues"
+    "url": "https://github.com/XboxDevCom/agencies/issues"
   },
   "dependencies": {
     "@types/jest": "^27.5.2",
@@ -47,7 +47,7 @@
     "test:ci": "CI=true react-scripts test --coverage --watchAll=false --passWithNoTests",
     "test:a11y": "npm run build && npm run test:accessibility",
     "test:accessibility": "node scripts/accessibility-test.js",
-    "test:i18n": "node scripts/test-translations.js",
+    "test:i18n": "npm run validate:translations",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
@@ -57,7 +57,7 @@
     "type-check": "tsc --noEmit",
     "analyze": "npm run build && node scripts/bundle-analysis.js",
     "dev": "npm start",
-    "audit:a11y": "node scripts/audit-accessibility.js",
+    "audit:a11y": "npm run test:a11y",
     "extract:translations": "node scripts/extract-translations.js",
     "validate:translations": "node scripts/validate-translations.js",
     "version:patch": "npm run pre-release && npm version patch && npm run post-release",
@@ -69,7 +69,8 @@
     "release:minor": "npm run version:minor",
     "release:major": "npm run version:major",
     "changelog": "node scripts/generate-changelog.js",
-    "prepare": "node scripts/setup-git-hooks.js"
+    "prepare": "node scripts/setup-git-hooks.js",
+    "validate:data": "node scripts/validate-data.js"
   },
   "eslintConfig": {
     "extends": [

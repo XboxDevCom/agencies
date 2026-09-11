@@ -1,51 +1,10 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-
-const Navigation: React.FC = () => {
-  const location = useLocation();
-  
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
-  
-  const linkClasses = (path: string) => {
-    const base = "px-4 py-2 rounded-lg font-medium transition-colors duration-200";
-    return isActive(path)
-      ? `${base} bg-green-600 text-white`
-      : `${base} text-gray-300 hover:bg-gray-700 hover:text-white`;
-  };
-  
-  return (
-    <nav className="bg-gray-800 border-b border-gray-700 mb-6">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-2 sm:space-x-4 overflow-x-auto">
-            <Link
-              to="/"
-              className={linkClasses('/')}
-              aria-current={isActive('/') ? 'page' : undefined}
-            >
-              <span className="hidden sm:inline">🏢 </span>Agenturen
-            </Link>
-            <Link
-              to="/investor-tips"
-              className={linkClasses('/investor-tips')}
-              aria-current={isActive('/investor-tips') ? 'page' : undefined}
-            >
-              <span className="hidden sm:inline">📊 </span>Investoren-Tipps
-            </Link>
-            <Link
-              to="/dividend-calculator"
-              className={linkClasses('/dividend-calculator')}
-              aria-current={isActive('/dividend-calculator') ? 'page' : undefined}
-            >
-              <span className="hidden sm:inline">💰 </span>Rendite-Rechner
-            </Link>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-};
-
-export default Navigation;
+import { useTranslation, SupportedLanguage } from '../i18n/I18nProvider';
+import { useDirectoryCopy } from '../i18n/directory';
+export default function Navigation() {
+  const { language, setLanguage, t } = useTranslation();
+  const c = useDirectoryCopy();
+  const { pathname } = useLocation();
+  return <header className="site-header"><div className="nav-inner"><Link to="/" className="brand" aria-label="DACH Agency Directory"><span className="brand-mark" aria-hidden="true">a<span>.</span></span><span>agency<span className="brand-sub">DIRECTORY BY XBOXDEV</span></span></Link><nav aria-label={c.directory} className="primary-nav"><Link to="/" aria-current={pathname === '/' ? 'page' : undefined}>{c.directory}</Link><details className="tools-menu"><summary>{c.tools}</summary><div><Link to="/investor-tips">{c.investors}</Link><Link to="/dividend-calculator">{c.calculator}</Link></div></details></nav><div className="language-control"><label className="sr-only" htmlFor="language">{t('language.switch', { language: t(`language.${language}`) })}</label><select id="language" value={language} onChange={e => setLanguage(e.target.value as SupportedLanguage)}><option value="de">Deutsch</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option></select></div></div></header>;
+}

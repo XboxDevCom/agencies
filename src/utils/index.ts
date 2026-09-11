@@ -1,4 +1,5 @@
-import { Creator } from '../types/Creator';
+import { Creator, DEFAULT_CREATOR, FilterOptions } from '../types/Creator';
+import Papa from 'papaparse';
 
 // Debounce function for search input
 export const debounce = <T extends (...args: any[]) => any>(
@@ -34,8 +35,8 @@ export const isValidEmail = (email: string): boolean => {
 // Validate URL
 export const isValidUrl = (url: string): boolean => {
   try {
-    new URL(url);
-    return true;
+    const parsed = new URL(url);
+    return ['http:', 'https:'].includes(parsed.protocol) && !parsed.username && !parsed.password;
   } catch {
     return false;
   }
@@ -60,6 +61,8 @@ export const sortCreators = (
   return [...creators].sort((a, b) => {
     const aValue = a[field];
     const bValue = b[field];
+    const missing = (value: unknown) => value === null || value === undefined || value === '' || value === 'unknown' || (Array.isArray(value) && value.length === 0);
+    if (missing(aValue) || missing(bValue)) return Number(missing(aValue)) - Number(missing(bValue));
 
     if (typeof aValue === 'string' && typeof bValue === 'string') {
       return direction === 'asc' 
@@ -89,20 +92,13 @@ export const sortCreators = (
 export const filterCreators = (
   creators: Creator[],
   searchQuery: string,
-  filters: {
-    platform: string;
-    status: string;
-    minFollowers: number;
-    focus: string;
-    type: string;
-    pricing_model: string;
-  }
+  filters: FilterOptions
 ): Creator[] => {
   return creators.filter(creator => {
     if (!creator) return false;
     
     // Search functionality
-    const searchLower = searchQuery.toLowerCase();
+    const searchLower = searchQuery.trim().toLocaleLowerCase();
     const matchesSearch = !searchQuery || 
       creator.agency?.toLowerCase().includes(searchLower) ||
       creator.description?.toLowerCase().includes(searchLower) ||
@@ -123,25 +119,51 @@ export const filterCreators = (
       (filters.status === '' || creator.status === filters.status) &&
       (filters.type === '' || creator.type === filters.type) &&
       (filters.pricing_model === '' || creator.pricing_model === filters.pricing_model) &&
-      (filters.minFollowers === 0 || creator.followers >= filters.minFollowers)
+      (!filters.country || (creator.country || 'unknown').split(',').map(country => country.trim()).includes(filters.country)) &&
+      (filters.minFollowers === 0 || (creator.followers !== null && creator.followers >= filters.minFollowers))
     );
   });
 };
 
 // Parse CSV data to Creator objects
-export const parseCreatorData = (csvData: any[]): Creator[] => {
-  return csvData
-    .filter((row: any) => row && Object.keys(row).length > 0)
-    .map((row: any) => ({
-      ...row,
-      focus: row.focus ? row.focus.split(',').map((item: string) => item.trim()).filter(Boolean) : [],
-      platforms: row.platforms ? row.platforms.split(',').map((item: string) => item.trim()).filter(Boolean) : [],
-      references: row.references ? row.references.split(',').map((item: string) => item.trim()).filter(Boolean) : [],
-      conditions: row.conditions ? row.conditions.split(',').map((item: string) => item.trim()).filter(Boolean) : [],
-      departments: row.departments ? row.departments.split(',').map((item: string) => item.trim()).filter(Boolean) : [],
-      followers: parseInt(row.followers) || 0,
-      founding_year: parseInt(row.founding_year) || new Date().getFullYear()
-    })) as Creator[];
+export const parseCreatorData = (csvData: unknown[]): Creator[] => {
+  const list = (value: unknown, separator = ','): string[] => typeof value === 'string'
+    ? Array.from(new Set(value.split(separator).map(item => item.trim()).filter(Boolean))) : [];
+  const integer = (value: unknown): number | null => {
+    if (typeof value !== 'string' || !/^\d+$/.test(value.trim())) return null;
+    const number = Number(value);
+    return Number.isSafeInteger(number) ? number : null;
+  };
+  return csvData.filter((row): row is Record<string, string> => !!row && typeof row === 'object' &&
+    'agency' in row && typeof (row as Record<string, unknown>).agency === 'string' && !!(row as Record<string, string>).agency.trim())
+    .map(row => {
+      const year = integer(row.founding_year);
+      return {
+        ...DEFAULT_CREATOR, ...row,
+        agency: row.agency.trim(), url: isValidUrl(row.url || '') ? row.url.trim() : '',
+        type: ['exclusive', 'mass'].includes(row.type) ? row.type as Creator['type'] : 'unknown',
+        pricing_model: ['commission', 'base_fee'].includes(row.pricing_model) ? row.pricing_model as Creator['pricing_model'] : 'unknown',
+        status: ['active', 'inactive'].includes(row.status) ? row.status as Creator['status'] : 'unknown',
+        legal_form: (row.legal_form || '') as Creator['legal_form'],
+        focus: list(row.focus), platforms: list(row.platforms), references: list(row.references),
+        conditions: list(row.conditions), departments: list(row.departments),
+        source_urls: list(row.source_urls, '|').filter(isValidUrl), verified_fields: list(row.verified_fields),
+        checked_at: /^\d{4}-\d{2}-\d{2}$/.test(row.checked_at || '') && !Number.isNaN(Date.parse(row.checked_at)) ? row.checked_at : '',
+        followers: integer(row.followers), founding_year: year && year >= 1800 && year <= new Date().getFullYear() ? year : null,
+      };
+    });
+};
+
+export const parseCreatorCSV = (csv: string): Creator[] => {
+  const parsed = Papa.parse<Record<string, string>>(csv, { header: true, skipEmptyLines: 'greedy', transformHeader: header => header.trim() });
+  if (parsed.errors.length || !['agency', 'url', 'focus', 'platforms', 'status'].every(field => parsed.meta.fields?.includes(field))) {
+    throw new Error('Invalid agency CSV schema');
+  }
+  const agencies = parseCreatorData(parsed.data);
+  if (!agencies.length || agencies.length !== parsed.data.length || new Set(agencies.map(a => a.agency.toLowerCase())).size !== agencies.length) {
+    throw new Error('Empty, unnamed or duplicate agency records');
+  }
+  return agencies;
 };
 
 // Get unique values from array of creators for filter options
@@ -177,18 +199,10 @@ export const exportToCSV = (creators: Creator[], filename = 'agencies.csv'): voi
     'description', 'departments', 'legal_form', 'location', 'founding_year'
   ];
 
-  const csvContent = [
-    headers.join(','),
-    ...creators.map(creator => 
-      headers.map(header => {
-        const value = creator[header as keyof Creator];
-        if (Array.isArray(value)) {
-          return `"${value.join(', ')}"`;
-        }
-        return `"${value || ''}"`;
-      }).join(',')
-    )
-  ].join('\n');
+  const csvContent = Papa.unparse({ fields: headers, data: creators.map(creator => headers.map(header => {
+    const value = creator[header as keyof Creator];
+    return Array.isArray(value) ? value.join(', ') : value ?? '';
+  })) }, { escapeFormulae: true });
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
@@ -199,6 +213,7 @@ export const exportToCSV = (creators: Creator[], filename = 'agencies.csv'): voi
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 };
 
 // Local storage helpers

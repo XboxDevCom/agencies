@@ -1,53 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-
-// Define source and destination paths
-const sourcePath = path.join(__dirname, '..', 'public', 'data.csv');
-const destPath = path.join(__dirname, '..', 'build', 'data.csv');
-
-console.log('Source path:', sourcePath);
-console.log('Destination path:', destPath);
-
-// Create build directory if it doesn't exist
-const buildDir = path.join(__dirname, '..', 'build');
-if (!fs.existsSync(buildDir)) {
-  console.log('Creating build directory:', buildDir);
-  fs.mkdirSync(buildDir, { recursive: true });
+const root = path.join(__dirname, '..');
+const build = path.join(root, 'build');
+for (const asset of ['data.csv', 'CNAME']) fs.copyFileSync(path.join(root, 'public', asset), path.join(build, asset));
+for (const route of ['investor-tips', 'dividend-calculator']) {
+  fs.mkdirSync(path.join(build, route), { recursive: true });
+  fs.copyFileSync(path.join(build, 'index.html'), path.join(build, route, 'index.html'));
 }
-
-// Copy data.csv to build directory
-try {
-  // Ensure the source file exists
-  if (!fs.existsSync(sourcePath)) {
-    console.error('Source file not found:', sourcePath);
-    process.exit(1);
-  }
-
-  console.log('Source file exists, copying...');
-
-  // Copy the file
-  fs.copyFileSync(sourcePath, destPath);
-  console.log('Successfully copied data.csv to build directory');
-
-  // Verify the file was copied
-  if (!fs.existsSync(destPath)) {
-    console.error('Failed to copy data.csv to build directory');
-    process.exit(1);
-  }
-
-  // Verify file contents
-  const sourceStats = fs.statSync(sourcePath);
-  const destStats = fs.statSync(destPath);
-  console.log('Source file size:', sourceStats.size);
-  console.log('Destination file size:', destStats.size);
-
-  if (sourceStats.size !== destStats.size) {
-    console.error('File sizes do not match!');
-    process.exit(1);
-  }
-
-  console.log('File copy verified successfully');
-} catch (err) {
-  console.error('Error copying data.csv:', err);
-  process.exit(1);
-} 
+fs.copyFileSync(path.join(build, 'index.html'), path.join(build, '404.html'));
+console.log('Directory data, domain and route entrypoints ready.');
