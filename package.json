@@ -138,10 +138,10 @@
   },
   "overrides": {
     "react-scripts": {
-      "nth-check": "^2.0.1",
       "postcss": "^8.4.31",
       "webpack-dev-server": "^4.15.1"
-    }
+    },
+    "nth-check": "^2.0.1"
   },
   "devDependencies": {
     "@axe-core/react": "^4.8.2",
