@@ -1,6 +1,7 @@
 import { useTranslation } from './I18nProvider';
 
 const de = {
+  websiteUnverified: 'Keine bestätigte aktuelle Website hinterlegt.',
   directory: 'Verzeichnis', tools: 'Weitere Tools', investors: 'Investoren-Tipps', calculator: 'Rendite-Rechner',
   title: 'Creator. Agenturen. Verbindungen.', subtitle: 'Agenturen und Netzwerke im DACH-Umfeld – nach Schwerpunkt und Plattform entdecken.',
   search: 'Agentur, Schwerpunkt oder Standort suchen', results: 'Ergebnisse', entries: 'Einträge', all: 'Alle',
@@ -17,6 +18,7 @@ const de = {
 };
 type Copy = Record<keyof typeof de, string>;
 const en: Copy = {
+  websiteUnverified: 'No confirmed current website on record.',
   directory: 'Directory', tools: 'More tools', investors: 'Investor tips', calculator: 'Yield calculator',
   title: 'Creators. Agencies. Connections.', subtitle: 'Discover agencies and networks in the DACH ecosystem by focus and platform.',
   search: 'Search agency, focus or location', results: 'Results', entries: 'Entries', all: 'All',
@@ -32,6 +34,7 @@ const en: Copy = {
   dataLanguage: 'Profile descriptions retain the language of the research.',
 };
 const fr: Copy = {
+  websiteUnverified: 'Aucun site actuel confirmé dans cette fiche.',
   directory: 'Annuaire', tools: 'Autres outils', investors: 'Conseils investisseurs', calculator: 'Calculateur de rendement',
   title: 'Créateurs. Agences. Connexions.', subtitle: 'Agences et réseaux de l’écosystème DACH, par spécialité et plateforme.',
   search: 'Rechercher une agence, spécialité ou ville', results: 'Résultats', entries: 'Entrées', all: 'Tous',
@@ -47,6 +50,7 @@ const fr: Copy = {
   dataLanguage: 'Les descriptions conservent la langue de la recherche.',
 };
 const it: Copy = {
+  websiteUnverified: 'Nessun sito attuale confermato per questa voce.',
   directory: 'Elenco', tools: 'Altri strumenti', investors: 'Consigli investitori', calculator: 'Calcolatore di rendimento',
   title: 'Creator. Agenzie. Connessioni.', subtitle: 'Agenzie e reti nell’ecosistema DACH, per specializzazione e piattaforma.',
   search: 'Cercare agenzia, specializzazione o città', results: 'Risultati', entries: 'Voci', all: 'Tutte',
