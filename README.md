@@ -7,7 +7,7 @@ Agenturen, Creator-Netzwerke und verwandte Marketinganbieter im DACH-Umfeld. Rea
 - Responsive Verzeichnisansicht mit Suchfeld, Filtern und Agenturprofilen.
 - Filter für Schwerpunkt, Plattform, Land, Status und dokumentierte Vertrags-/Reichweitenangaben; Sortierung nach allen bisherigen Datenfeldern.
 - Oberfläche auf Deutsch, Englisch, Französisch und Italienisch. Recherchetexte behalten ihre Ursprungssprache.
-- 45 bestehende Einträge erhalten. Bei 38 Einträgen wurden konkrete Felder anhand von Primärquellen geprüft; sieben bleiben ungeklärt.
+- 45 bestehende Einträge erhalten. Bei 39 Einträgen wurden konkrete Felder anhand von Primärquellen geprüft; sechs bleiben ungeklärt.
 - Quellen, Prüfdatum und geprüfte Felder stehen direkt im Agenturprofil und in `public/data.csv`.
 - Unbelegte Reichweiten, Vergütungsmodelle, Creator-Zuordnungen und Bedingungen wurden entfernt. Fehlende Werte bleiben unbekannt, einschließlich Gründungsjahr und Agenturtyp.
 - Tastaturbedienbare Profile mit nativem Dialog, Fokus-Rückgabe und Escape zum Schließen.

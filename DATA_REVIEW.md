@@ -1,6 +1,6 @@
 # Quellenprüfung des Agenturverzeichnisses
 
-Prüfdatum: 11. September 2026. 45 bestehende Einträge, davon 38 mit feldbezogenen Primärquellen. Die Zahl zählt Verzeichniseinträge, keine voneinander unabhängigen aktiven Unternehmen: Buzzbird verweist beispielsweise auf Studio71.
+Prüfstand: 11. September 2026; Korrektur von 2nd Wave am 12. September 2026. 45 bestehende Einträge, davon 39 mit feldbezogenen Primärquellen. Die Zahl zählt Verzeichniseinträge, keine voneinander unabhängigen aktiven Unternehmen: Buzzbird verweist beispielsweise auf Studio71.
 
 ## Bereinigung
 
@@ -14,7 +14,6 @@ InfluencerDB ist laut eigenem Unternehmensprofil eingestellt. Das genaue Jahr wu
 
 | Eintrag | Offener Punkt |
 |---|---|
-| 2Wave | Exakter Name und Domain nicht belegt. 2nd Wave ist ein plausibler Kandidat, aber die Zuordnung ist nicht bestätigt. |
 | Digital Ninjas | Historischer Gaming-/Talent-Auftritt auffindbar; aktuelle kanonische Website, Standort und Status bleiben offen. |
 | NewBasement | Kein eindeutiger aktueller Agenturbeleg; Musiklabel und ähnlich benannte Management-Firmen nicht gleichgesetzt. |
 | Next Level Creators | Namensgleicher US-Anbieter gefunden; Identität mit dem bisherigen Datensatz nicht belegt. |
@@ -22,11 +21,19 @@ InfluencerDB ist laut eigenem Unternehmensprofil eingestellt. Das genaue Jahr wu
 | Talenthouse | Keine aktuelle Agenturtätigkeit auf der bisherigen Website verifiziert. Abruffehler beweisen keine Schließung. |
 | United Creators | Namensgleiche Berliner Beratungsfirma gefunden; Zuordnung zur bisherigen Gaming-Agentur nicht belegt. |
 
-Die sieben Einträge bleiben erhalten und sichtbar als ungeprüft. Die alten Websites sind keine geprüften Empfehlungen.
+Die sechs Einträge bleiben erhalten und sichtbar als ungeprüft. Die alten Websites sind keine geprüften Empfehlungen.
 
 ## Quellen je Eintrag
 
 Die folgende Liste spiegelt den CSV-Stand wider. Geprüfte Felder sind ausdrücklich begrenzt; nicht genannte Felder bleiben unbekannt.
+
+### 2nd Wave
+
+Die zuvor als 2Wave eingetragene Agentur wurde am 12. September 2026 vom Verzeichnisinhaber als 2nd Wave identifiziert. Der bisherige Link auf 2wave.de war falsch und wurde entfernt. Name, Leistungen, Plattformen, Rechtsform und Berliner Kontaktanschrift sind auf der offiziellen Website belegt. Reichweiten und Vertragsmodelle bleiben unbeziffert.
+
+Geprüfte Felder: `agency, url, focus, platforms, description, legal_form, location, country`.
+
+- [Offizielle Website](https://2ndwave.rocks/)
 
 ### Ad Specialist
 
