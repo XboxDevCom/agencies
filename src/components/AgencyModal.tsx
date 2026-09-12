@@ -19,6 +19,7 @@ export default function AgencyModal({ agency, onClose }: Props) {
   }, [agency]);
   if (!agency) return null;
   const unknown = c.unknown;
+  const hasVerifiedWebsite = isValidUrl(agency.url) && !!agency.checked_at && !!agency.source_urls?.some(isValidUrl) && !!agency.verified_fields?.includes('url');
   const text = (items: string[]) => items.length ? items.join(', ') : unknown;
   const details: [string, React.ReactNode][] = [
     [t('modal.location'), agency.location || unknown], [t('modal.legalForm'), agency.legal_form || unknown],
@@ -36,7 +37,7 @@ export default function AgencyModal({ agency, onClose }: Props) {
     <h2 id="agency-dialog-title">{agency.agency}</h2>
     <div className="dialog-focus">{agency.focus.map(f => <span className="tag" key={f}>{f}</span>)}</div>
     <p className="dialog-description">{agency.description || agency.notes || c.legacy}</p>
-    {isValidUrl(agency.url) && <a className="button-primary" href={agency.url} target="_blank" rel="noopener noreferrer">{c.website} · {extractDomain(agency.url)} <span aria-hidden="true">↗</span></a>}
+    {hasVerifiedWebsite ? <a className="button-primary" href={agency.url} target="_blank" rel="noopener noreferrer">{c.website} · {extractDomain(agency.url)} <span aria-hidden="true">↗</span></a> : <p className="muted">{c.websiteUnverified}</p>}
     <section className="source-panel"><h3>{c.sources}</h3>{agency.checked_at && agency.source_urls?.length ? <><p>{c.checked}: <time dateTime={agency.checked_at}>{new Date(`${agency.checked_at}T12:00:00Z`).toLocaleDateString(language)}</time></p><p>{c.fields}: {agency.verified_fields?.map(f => fieldLabels[f] || f).join(', ')}</p><ul>{agency.source_urls.filter(isValidUrl).map((url, i) => <li key={url}><a href={url} target="_blank" rel="noopener noreferrer">{c.source} {i + 1} · {extractDomain(url)} ↗</a></li>)}</ul></> : <p>{c.noSource} {c.legacy}</p>}</section>
     <h3 className="details-heading">{t('modal.basicInfo')}</h3><dl className="profile-facts">{details.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
     {agency.notes && agency.description && <p className="muted">{agency.notes}</p>}

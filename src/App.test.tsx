@@ -57,3 +57,15 @@ test('directory semantics pass axe checks after records load', async () => {
   const results = await axe(container);
   expect(results.violations).toEqual([]);
 });
+test('historical evidence does not expose an unverified website as an agency link', async () => {
+  (fetch as jest.Mock).mockResolvedValue({ ok: true, text: async () => 'agency,url,focus,platforms,status,source_urls,checked_at,verified_fields\nLegacy Agency,https://parked.example,Gaming,Twitch,unknown,https://partner.example/history,2026-09-12,agency\nCurrent Agency,https://current.example,Gaming,Twitch,unknown,https://current.example/about,2026-09-12,"agency, url"' });
+  render(<App />);
+  fireEvent.click(await screen.findByRole('button', { name: 'Legacy Agency' }));
+  const dialog = screen.getByRole('dialog');
+  expect(within(dialog).queryByRole('link', { name: /^Website/ })).not.toBeInTheDocument();
+  expect(within(dialog).getByText('Keine bestätigte aktuelle Website hinterlegt.')).toBeInTheDocument();
+  expect(within(dialog).getByRole('link', { name: /Quelle 1/ })).toHaveAttribute('href', 'https://partner.example/history');
+  fireEvent.click(within(dialog).getByRole('button', { name: 'Schließen' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Current Agency' }));
+  expect(within(screen.getByRole('dialog')).getByRole('link', { name: /^Website/ })).toHaveAttribute('href', 'https://current.example');
+});

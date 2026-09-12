@@ -7,7 +7,7 @@ Agenturen, Creator-Netzwerke und verwandte Marketinganbieter im DACH-Umfeld. Rea
 - Responsive Verzeichnisansicht mit Suchfeld, Filtern und Agenturprofilen.
 - Filter für Schwerpunkt, Plattform, Land, Status und dokumentierte Vertrags-/Reichweitenangaben; Sortierung nach allen bisherigen Datenfeldern.
 - Oberfläche auf Deutsch, Englisch, Französisch und Italienisch. Recherchetexte behalten ihre Ursprungssprache.
-- 45 bestehende Einträge erhalten. Bei 39 Einträgen wurden konkrete Felder anhand von Primärquellen geprüft; sechs bleiben ungeklärt.
+- 45 bestehende Einträge erhalten. Bei 43 Einträgen liegen feldbezogene Quellen vor, teils historische Anbieterbelege; zwei Identitäten bleiben ungeklärt. Aktueller Betrieb ist damit nicht pauschal bestätigt.
 - Quellen, Prüfdatum und geprüfte Felder stehen direkt im Agenturprofil und in `public/data.csv`.
 - Unbelegte Reichweiten, Vergütungsmodelle, Creator-Zuordnungen und Bedingungen wurden entfernt. Fehlende Werte bleiben unbekannt, einschließlich Gründungsjahr und Agenturtyp.
 - Tastaturbedienbare Profile mit nativem Dialog, Fokus-Rückgabe und Escape zum Schließen.
@@ -68,3 +68,5 @@ Die Finanzseiten enthalten historische, ungeprüfte Kurs-, Rendite- und Steueran
 ## Verbleibende technische Altlasten
 
 Die kompatiblen Abhängigkeitsupdates im September 2026 haben den npm-Audit-Befund von 69 auf 34 Einträge reduziert und alle vier kritischen Befunde beseitigt. Es verbleiben 15 hohe, zehn mittlere und neun niedrige Meldungen, überwiegend in der alten Build-/Test-Werkzeugkette; auch React Router hat verbleibende mittlere Meldungen. Das ist keine Sicherheitsfreigabe. Eine vollständige Bereinigung erfordert gesondert getestete größere Versionswechsel, insbesondere der Create-React-App-Werkzeugkette. `npm audit fix --force` ist hier keine geeignete Reparatur: npm schlägt dabei unter anderem `react-scripts@0.0.0` vor.
+
+Die [Identitäts- und Websiteprüfung vom 12.09.2026](DOMAIN_AUDIT.md) dokumentiert die Nachprüfung aller übrigen 44 Einträge. Website-Buttons erscheinen nur bei ausdrücklich geprüfter URL; fünf unbestätigte oder historische Domains erhalten keinen Website-Button.
